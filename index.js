@@ -34,7 +34,7 @@ async function main() {
         .map((row) => {
             const name = row.name.toLowerCase();
             projectLink[name] = Object.freeze({
-                uses: new Set(), dependOn: new Set()
+                uses: [], dependOn: []
             });
 
             return {
@@ -70,9 +70,9 @@ async function main() {
                 const [, name] = dep.split("/");
                 const fName = name.toLowerCase();
 
-                projectLink[repo.name].uses.add(fName);
+                projectLink[repo.name].uses.push(fName);
                 if (Reflect.has(projectLink, fName)) {
-                    projectLink[fName].dependOn.add(repo.name);
+                    projectLink[fName].dependOn.push(repo.name);
                 }
                 else {
                     orphans.add(fName);
@@ -84,6 +84,9 @@ async function main() {
         }
     }
     console.timeEnd("gen_link");
+
+    console.log("\nOrphans:");
+    console.log(orphans);
 
     // Write file on the disk!
     await writeFile(join(__dirname, "data", "link.json"), JSON.stringify(projectLink, null, 4));
