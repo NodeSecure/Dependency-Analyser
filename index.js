@@ -12,7 +12,18 @@ const { get } = require("httpie");
 // CONSTANTS
 const token = process.env.GIT_TOKEN;
 
+function startHTTPServer() {
+    // Do http things here!
+}
+
 async function main() {
+    const [arg = ""] = process.argv.slice(2);
+    if (arg.startsWith("--skip")) {
+        startHTTPServer();
+
+        return void 0;
+    }
+
     console.time("gen_link");
     const orphans = new Set();
     const projectLink = Object.create(null);
@@ -73,5 +84,8 @@ async function main() {
 
     // Write file on the disk!
     await writeFile(join(__dirname, "data", "link.json"), JSON.stringify(projectLink, null, 4));
+    startHTTPServer();
+
+    return void 0;
 }
 main().catch(console.error);
