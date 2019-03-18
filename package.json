@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "node index",
+        "skip": "node index --skip",
         "prepublishOnly": "pkg-ok",
         "test": "ava --verbose",
         "doc": "jsdoc -c ./jsdoc.json -r -R ./README.md -P ./package.json --verbose",
