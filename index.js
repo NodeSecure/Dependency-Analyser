@@ -1,5 +1,5 @@
 // Require Node.js Dependencies
-const { writeFile } = require("fs").promises;
+const { writeFile, readFile } = require("fs").promises;
 const { join } = require("path");
 
 // Require Third-party Dependencies
@@ -8,18 +8,29 @@ require("dotenv").config();
 const repos = require("repos");
 const { yellow, red, green } = require("kleur");
 const { get } = require("httpie");
+const polka = require("polka");
+const send = require("@polka/send-type");
 
 // CONSTANTS
+const VIEW_DIR = join(__dirname, "views");
+const LINK_FILE = join(__dirname, "data", "link.json");
 const token = process.env.GIT_TOKEN;
 
-function startHTTPServer() {
-    console.log(green("start http server!"));
+async function startHTTPServer(data = {}) {
+    console.log(green("Starting HTTP Server on port: 1337"));
+    const view = await readFile(join(VIEW_DIR, "index.html"), { encoding: "utf8" });
+
+    polka()
+        .get("/", (req, res) => send(res, 200, view, { "Content-Type": "text/html" }))
+        .get("/data", (req, res) => send(res, 200, data))
+        .listen(1337);
 }
 
 async function main() {
     const [arg = ""] = process.argv.slice(2);
     if (arg.startsWith("--skip")) {
-        startHTTPServer();
+        const data = await readFile(LINK_FILE);
+        await startHTTPServer(JSON.parse(data));
 
         return void 0;
     }
@@ -90,7 +101,7 @@ async function main() {
 
     // Write file on the disk!
     await writeFile(join(__dirname, "data", "link.json"), JSON.stringify(projectLink, null, 4));
-    startHTTPServer();
+    await startHTTPServer(projectLink);
 
     return void 0;
 }

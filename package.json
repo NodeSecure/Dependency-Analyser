@@ -24,9 +24,11 @@
     },
     "homepage": "https://github.com/SlimIO/ProjectsView#readme",
     "dependencies": {
+        "@polka/send-type": "^0.5.2",
         "httpie": "^1.1.1",
         "kleur": "^3.0.2",
         "make-promises-safe": "^4.0.0",
+        "polka": "^0.5.2",
         "repos": "^2.0.0"
     },
     "devDependencies": {
