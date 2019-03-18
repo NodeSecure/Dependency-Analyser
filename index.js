@@ -50,12 +50,13 @@ async function main() {
             const slimioDep = Object.keys(pkg.dependencies || {}).filter((name) => name.startsWith("@slimio"));
 
             for (const dep of slimioDep) {
-                projectLink[repo.name].uses.add(dep);
-                if (Reflect.has(projectLink, dep)) {
-                    projectLink[dep].dependOn.add(repo.name);
+                const [, name] = dep.split("/");
+                projectLink[repo.name].uses.add(name);
+                if (Reflect.has(projectLink, name)) {
+                    projectLink[name].dependOn.add(repo.name);
                 }
                 else {
-                    orphans.add(dep);
+                    orphans.add(name);
                 }
             }
         }
