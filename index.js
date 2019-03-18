@@ -1,3 +1,7 @@
+// Require Node.js Dependencies
+const { writeFile } = require("fs").promises;
+const { join } = require("path");
+
 // Require Third-party Dependencies
 require("make-promises-safe");
 require("dotenv").config();
@@ -33,6 +37,7 @@ async function main() {
             };
         });
 
+    // TODO: do this Asynchronously
     for (const repo of filteredRepositories) {
         console.log(`- Processing ${yellow(repo.fullName)}`);
         const packageURL = new URL(`https://api.github.com/repos/${repo.fullName}/contents/package.json`);
@@ -66,6 +71,7 @@ async function main() {
     }
     console.timeEnd("gen_link");
 
-    console.log(JSON.stringify(projectLink, null, 2));
+    // Write file on the disk!
+    await writeFile(join(__dirname, "data", "link.json"), JSON.stringify(projectLink, null, 4));
 }
 main().catch(console.error);
