@@ -32,14 +32,15 @@ async function main() {
     const filteredRepositories = fullRepositories
         .filter((row) => row.archived === false)
         .map((row) => {
-            projectLink[row.name] = Object.freeze({
+            const name = row.name.toLowerCase();
+            projectLink[name] = Object.freeze({
                 uses: new Set(), dependOn: new Set()
             });
 
             return {
                 id: row.id,
                 fullName: row.full_name,
-                name: row.name,
+                name,
                 url: row.html_url,
                 desc: row.description,
                 // size: row.size,
@@ -67,12 +68,14 @@ async function main() {
 
             for (const dep of slimioDep) {
                 const [, name] = dep.split("/");
-                projectLink[repo.name].uses.add(name);
-                if (Reflect.has(projectLink, name)) {
-                    projectLink[name].dependOn.add(repo.name);
+                const fName = name.toLowerCase();
+
+                projectLink[repo.name].uses.add(fName);
+                if (Reflect.has(projectLink, fName)) {
+                    projectLink[fName].dependOn.add(repo.name);
                 }
                 else {
-                    orphans.add(name);
+                    orphans.add(fName);
                 }
             }
         }
