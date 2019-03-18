@@ -10,19 +10,17 @@ SlimIO Projects Global Overview
 
 ## Getting Started
 
-This package is available in the Node Package Repository and can be easily installed with [npm](https://docs.npmjs.com/getting-started/what-is-npm) or [yarn](https://yarnpkg.com).
-
 ```bash
-$ npm i @slimio/projects-view
-# or
-$ yarn add @slimio/projects-view
+$ git clone https://github.com/SlimIO/ProjectsView.git
+$ npm install
 ```
 
-## Usage example
-TBC
+Then create a local `.env` file with a Personal Github token
+```
+GIT_TOKEN=
+```
 
-## API
-TBC
+Run `npm start` for a full run.. or just run the http server with `npm run skip`.
 
 ## License
 MIT
