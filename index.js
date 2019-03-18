@@ -6,14 +6,14 @@ const { join } = require("path");
 require("make-promises-safe");
 require("dotenv").config();
 const repos = require("repos");
-const { yellow, red } = require("kleur");
+const { yellow, red, green } = require("kleur");
 const { get } = require("httpie");
 
 // CONSTANTS
 const token = process.env.GIT_TOKEN;
 
 function startHTTPServer() {
-    // Do http things here!
+    console.log(green("start http server!"));
 }
 
 async function main() {
