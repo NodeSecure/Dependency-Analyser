@@ -18,9 +18,10 @@ $ npm install
 Then create a local `.env` file with a Personal Github token
 ```
 GIT_TOKEN=
+HTTP_PORT=1337
 ```
 
-Run `npm start` for a full run.. or just run the http server with `npm run skip`.
+Run `npm start` for a full run.. or just run the http server with `npm run skip` (full run must be executed at least one time).
 
 ## License
 MIT

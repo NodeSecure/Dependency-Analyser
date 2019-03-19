@@ -21,13 +21,15 @@ const projectLink = Object.create(null);
 const orphans = new Set();
 
 async function startHTTPServer(data = {}) {
-    console.log(green("Starting HTTP Server on port: 1337"));
+    const port = process.env.HTTP_PORT || 1337;
     const view = await readFile(join(VIEW_DIR, "index.html"), { encoding: "utf8" });
 
     polka()
         .get("/", (req, res) => send(res, 200, view, { "Content-Type": "text/html" }))
         .get("/data", (req, res) => send(res, 200, data))
-        .listen(1337);
+        .listen(port, () => {
+            console.log(green(`Starting HTTP Server on port: ${yellow(port)}`));
+        });
 }
 
 async function processPackage(repo, URL) {
