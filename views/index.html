@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
     <title>SlimIO Projects Overview</title>
     <style type="text/css">
-        body, html {
+        body,
+        html {
             padding: 0;
             margin: 0;
             height: 100%;
@@ -28,10 +30,11 @@
         }
     </style>
 </head>
+
 <body>
     <section id="network"></section>
     <script>
-        document.addEventListener("DOMContentLoaded", async() => {
+        document.addEventListener("DOMContentLoaded", async () => {
             const raw = await fetch('/data', {
                 method: 'GET',
                 headers: {
@@ -49,7 +52,6 @@
                 info.id = ++id;
                 nodes.push({ id: info.id, label });
             }
-            console.log(projects);
 
             for (const [label, info] of Object.entries(projects)) {
                 for (const dep of info.dependOn) {
@@ -63,11 +65,34 @@
 
             // provide the data in the vis format
             const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
-            const options = {};
+            const options = {
+                nodes: {
+                    shape: "dot",
+                    size: 16,
+                    font: {
+                        size: 16,
+                        bold: true,
+                        background: "#FFF"
+                    }
+                },
+                physics: {
+                    forceAtlas2Based: {
+                        gravitationalConstant: -26,
+                        centralGravity: 0.005,
+                        springLength: 95,
+                        springConstant: 0.18
+                    },
+                    maxVelocity: 90,
+                    solver: "forceAtlas2Based",
+                    timestep: 0.35,
+                    stabilization: {iterations: 150}
+                }
+            };
 
             // initialize your network!
             const network = new vis.Network(container, data, options);
         });
     </script>
 </body>
+
 </html>
