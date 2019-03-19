@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
     <title>SlimIO Projects Overview</title>
     <style type="text/css">
@@ -14,6 +15,7 @@
             padding: 0;
             margin: 0;
             height: 100%;
+            font-family: "Roboto", sans-serif;
         }
 
         body {
@@ -43,17 +45,28 @@
                 }
             });
             const projects = await raw.json();
+            const internal = Object.entries(projects).filter(([, info]) => !info.external);
+            const external = Object.entries(projects).filter(([, info]) => info.external);
 
             const nodes = [];
             const edges = [];
 
             let id = 0;
-            for (const [label, info] of Object.entries(projects)) {
+
+            for (const [label, info] of external) {
                 info.id = ++id;
-                nodes.push({ id: info.id, label });
+                nodes.push({ id: info.id, label, color: "#4527a0" });
             }
 
-            for (const [label, info] of Object.entries(projects)) {
+            for (const [label, info] of internal) {
+                info.id = ++id;
+                nodes.push({ id: info.id, label, color: "#2e7d32" });
+                for (const dep of info.extDeps) {
+                    edges.push({ from: info.id, to: projects[dep].id });
+                }
+            }
+
+            for (const [label, info] of internal) {
                 for (const dep of info.dependOn) {
                     edges.push({ from: info.id, to: projects[dep].id });
                 }
@@ -67,25 +80,27 @@
             const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
             const options = {
                 nodes: {
-                    shape: "dot",
-                    size: 16,
+                    shape: "box",
+                    size: 24,
                     font: {
-                        size: 16,
-                        bold: true,
-                        background: "#FFF"
+                        face: "Roboto",
+                        vadjust: 0.5,
+                        size: 22,
+                        color: "#FFF",
+                        bold: true
                     }
                 },
                 physics: {
                     forceAtlas2Based: {
                         gravitationalConstant: -26,
                         centralGravity: 0.005,
-                        springLength: 95,
+                        springLength: 230,
                         springConstant: 0.18
                     },
-                    maxVelocity: 90,
+                    maxVelocity: 150,
                     solver: "forceAtlas2Based",
                     timestep: 0.35,
-                    stabilization: {iterations: 150}
+                    stabilization: { iterations: 150 }
                 }
             };
 

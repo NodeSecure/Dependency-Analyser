@@ -19,6 +19,7 @@ const LINK_FILE = join(__dirname, "data", "link.json");
 const token = process.env.GIT_TOKEN;
 const projectLink = Object.create(null);
 const orphans = new Set();
+const fullExtDeps = new Set();
 
 async function startHTTPServer(data = {}) {
     const port = process.env.HTTP_PORT || 1337;
@@ -46,7 +47,13 @@ async function processPackage(repo, URL) {
         const pkg = JSON.parse(data);
         const devDeps = Object.keys(pkg.devDependencies || {}).filter((name) => name.startsWith("@slimio"));
         const norDeps = Object.keys(pkg.dependencies || {}).filter((name) => name.startsWith("@slimio"));
+        const extDeps = Object.keys(pkg.dependencies || {}).filter((name) => !name.startsWith("@slimio"));
         const deps = [...new Set([...devDeps, ...norDeps])];
+
+        projectLink[repo.name].extDeps = extDeps;
+        for (const dep of extDeps) {
+            fullExtDeps.add(dep);
+        }
 
         for (const dep of deps) {
             const [, name] = dep.split("/");
@@ -83,7 +90,9 @@ async function main() {
             const name = row.name.toLowerCase();
             const license = row.license || {};
 
-            projectLink[name] = Object.freeze({
+            projectLink[name] = Object.seal({
+                extDeps: [],
+                external: false,
                 size: row.size || 0,
                 license: license.name || "N/A",
                 description: row.description || "",
@@ -105,6 +114,12 @@ async function main() {
         promises.push(processPackage(repo, packageURL));
     }
     await Promise.all(promises);
+
+    for (const dep of fullExtDeps) {
+        projectLink[dep] = {
+            external: true
+        };
+    }
     console.timeEnd("gen_link");
 
     console.log("\nOrphans:");
