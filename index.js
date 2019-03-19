@@ -42,9 +42,11 @@ async function processPackage(repo, URL) {
         });
 
         const pkg = JSON.parse(data);
-        const filteredDeps = Object.keys(pkg.dependencies || {}).filter((name) => name.startsWith("@slimio"));
+        const devDeps = Object.keys(pkg.devDependencies || {}).filter((name) => name.startsWith("@slimio"));
+        const norDeps = Object.keys(pkg.dependencies || {}).filter((name) => name.startsWith("@slimio"));
+        const deps = [...new Set([...devDeps, ...norDeps])];
 
-        for (const dep of filteredDeps) {
+        for (const dep of deps) {
             const [, name] = dep.split("/");
             const fName = name.toLowerCase();
 
