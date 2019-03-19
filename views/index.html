@@ -4,9 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
+    <title>SlimIO Projects Overview</title>
+    <style type="text/css">
+        body, html {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+        }
+
+        #network {
+            width: 96vw;
+            height: 96vh;
+            margin-top: calc(2vh - 4px);
+            border: 2px solid lightgray;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello world!</h1>
+    <section id="network"></section>
+    <script>
+        document.addEventListener("DOMContentLoaded", async() => {
+            const raw = await fetch('/data', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            const projects = await raw.json();
+
+            const nodes = [];
+            const edges = [];
+
+            let id = 0;
+            for (const [label, info] of Object.entries(projects)) {
+                info.id = ++id;
+                nodes.push({ id: info.id, label });
+            }
+            console.log(projects);
+
+            for (const [label, info] of Object.entries(projects)) {
+                for (const dep of info.dependOn) {
+                    edges.push({ from: info.id, to: projects[dep].id });
+                }
+            }
+
+
+            // create a network
+            const container = document.getElementById("network");
+
+            // provide the data in the vis format
+            const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+            const options = {};
+
+            // initialize your network!
+            const network = new vis.Network(container, data, options);
+        });
+    </script>
 </body>
 </html>
