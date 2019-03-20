@@ -118,26 +118,24 @@
                 // if something is selected:
                 if (params.nodes.length > 0) {
                     highlightActive = true;
-                    var i, j;
-                    var selectedNode = params.nodes[0];
-                    var degrees = 2;
+                    let i, j;
+                    const selectedNode = params.nodes[0];
+                    const degrees = 2;
 
                     // mark all nodes as hard to read.
-                    for (var nodeId in allNodes) {
+                    for (const nodeId in allNodes) {
                         allNodes[nodeId].color = 'rgba(200, 200, 200, 0.35)';
                         if (allNodes[nodeId].hiddenLabel === undefined) {
                             allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
                             allNodes[nodeId].label = undefined;
                         }
                     }
-                    var connectedNodes = network.getConnectedNodes(selectedNode);
-                    var allConnectedNodes = [];
+                    const connectedNodes = network.getConnectedNodes(selectedNode);
+                    let allConnectedNodes = [];
 
                     // get the second degree nodes
-                    for (i = 1; i < degrees; i++) {
-                        for (j = 0; j < connectedNodes.length; j++) {
-                            allConnectedNodes = allConnectedNodes.concat(network.getConnectedNodes(connectedNodes[j]));
-                        }
+                    for (j = 0; j < connectedNodes.length; j++) {
+                        allConnectedNodes = allConnectedNodes.concat(network.getConnectedNodes(connectedNodes[j]));
                     }
 
                     // all second degree nodes get a different color and their label back
