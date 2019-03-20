@@ -6,7 +6,7 @@ const { join } = require("path");
 require("make-promises-safe");
 require("dotenv").config();
 const repos = require("repos");
-const { yellow, red, green } = require("kleur");
+const { yellow, red, gray } = require("kleur");
 const { get } = require("httpie");
 const polka = require("polka");
 const send = require("@polka/send-type");
@@ -31,7 +31,7 @@ async function startHTTPServer(data = {}) {
         .get("/", (req, res) => send(res, 200, view, { "Content-Type": "text/html" }))
         .get("/data", (req, res) => send(res, 200, data))
         .listen(port, () => {
-            console.log(green(`Starting HTTP Server on port: ${yellow(port)}`));
+            console.log(gray(`\n > HTTP Server started at ${yellow(`http://localhost:${port}`)}\n`));
         });
 }
 
