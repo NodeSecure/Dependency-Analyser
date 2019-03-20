@@ -124,7 +124,7 @@
 
                     // mark all nodes as hard to read.
                     for (var nodeId in allNodes) {
-                        allNodes[nodeId].color = 'rgba(200,200,200,0.5)';
+                        allNodes[nodeId].color = 'rgba(200, 200, 200, 0.35)';
                         if (allNodes[nodeId].hiddenLabel === undefined) {
                             allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
                             allNodes[nodeId].label = undefined;
@@ -142,7 +142,7 @@
 
                     // all second degree nodes get a different color and their label back
                     for (i = 0; i < allConnectedNodes.length; i++) {
-                        allNodes[allConnectedNodes[i]].color = 'rgba(150,150,150,0.75)';
+                        allNodes[allConnectedNodes[i]].color = '#607D8B';
                         if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
                             allNodes[allConnectedNodes[i]].label = allNodes[allConnectedNodes[i]].hiddenLabel;
                             allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
