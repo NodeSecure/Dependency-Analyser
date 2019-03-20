@@ -21,6 +21,7 @@ const projectLink = Object.create(null);
 const orphans = new Set();
 const fullExtDeps = new Set();
 const packageException = new Set((process.env.EXCEPT_PKG || "").split(","));
+const npmOrg = `@${process.env.ORG_NAME.toLowerCase()}`;
 
 async function startHTTPServer(data = {}) {
     const port = process.env.HTTP_PORT || 1337;
@@ -46,9 +47,9 @@ async function processPackage(repo, URL) {
         });
 
         const pkg = JSON.parse(data);
-        const devDeps = Object.keys(pkg.devDependencies || {}).filter((name) => name.startsWith("@slimio"));
-        const norDeps = Object.keys(pkg.dependencies || {}).filter((name) => name.startsWith("@slimio"));
-        const extDeps = Object.keys(pkg.dependencies || {}).filter((name) => !name.startsWith("@slimio"));
+        const devDeps = Object.keys(pkg.devDependencies || {}).filter((name) => name.startsWith(npmOrg));
+        const norDeps = Object.keys(pkg.dependencies || {}).filter((name) => name.startsWith(npmOrg));
+        const extDeps = Object.keys(pkg.dependencies || {}).filter((name) => !name.startsWith(npmOrg));
         const deps = [...new Set([...devDeps, ...norDeps])];
 
         projectLink[repo.name].extDeps = extDeps;
