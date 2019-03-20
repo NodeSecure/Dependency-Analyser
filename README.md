@@ -3,11 +3,12 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/SlimIO/is/commit-activity)
 ![MIT](https://img.shields.io/github/license/mashape/apistatus.svg)
 
-SlimIO Projects Global Overview
+SlimIO Projects Global Overview. This project has been primaly designed for SlimIO but work with any kind of organisation who want to achieve a similar result.
 
 <p align="center">
     <img src="https://i.imgur.com/DE2sz4D.png" height="400">
 </p>
+
 ## Requirements
 - Node.js v10 or higher
 
