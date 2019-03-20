@@ -37,13 +37,5 @@
     },
     "engines": {
         "node": ">=10"
-    },
-    "nyc": {
-        "check-coverage": true,
-        "per-file": false,
-        "lines": 98,
-        "statements": 98,
-        "functions": 98,
-        "branches": 90
     }
 }
