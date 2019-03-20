@@ -53,6 +53,13 @@ async function processPackage(repo, URL) {
         const deps = [...new Set([...devDeps, ...norDeps])];
 
         projectLink[repo.name].extDeps = extDeps;
+
+        const cleanPkgName = pkg.name.startsWith("@") ? pkg.name.split("/")[1].toLowerCase() : pkg.name.toLowerCase();
+        if (cleanPkgName !== repo.name) {
+            console.log(`Detected different pkg/repo name, package => ${cleanPkgName}, repository => ${repo.name}`);
+            projectLink[cleanPkgName] = projectLink[repo.name];
+        }
+
         for (const dep of extDeps) {
             fullExtDeps.add(dep);
         }
@@ -126,9 +133,7 @@ async function main() {
         };
     }
     console.timeEnd("gen_link");
-
-    console.log("\nOrphans:");
-    console.log(orphans);
+    console.log(`\nOrphans: ${[...orphans]}`);
 
     // Write file on the disk!
     await writeFile(join(__dirname, "data", "link.json"), JSON.stringify(projectLink, null, 4));
