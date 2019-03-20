@@ -16,7 +16,7 @@ SlimIO Projects Global Overview. This project has been primaly designed for Slim
 
 ```bash
 $ git clone https://github.com/SlimIO/ProjectsView.git
-$ npm install
+$ npm ci
 ```
 
 Then create a local `.env` file with a Personal Github token
