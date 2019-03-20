@@ -19,6 +19,8 @@ Then create a local `.env` file with a Personal Github token
 ```
 GIT_TOKEN=
 HTTP_PORT=1337
+ORG_NAME=SlimIO
+EXCEPT_PKG=eslint-config,is
 ```
 
 Run `npm start` for a full run.. or just run the http server with `npm run skip` (full run must be executed at least one time).

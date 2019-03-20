@@ -20,7 +20,7 @@ const token = process.env.GIT_TOKEN;
 const projectLink = Object.create(null);
 const orphans = new Set();
 const fullExtDeps = new Set();
-const packageException = new Set(["eslint-config", "is"]);
+const packageException = new Set((process.env.EXCEPT_PKG || "").split(","));
 
 async function startHTTPServer(data = {}) {
     const port = process.env.HTTP_PORT || 1337;
@@ -87,7 +87,7 @@ async function main() {
     }
 
     console.time("gen_link");
-    const fullRepositories = await repos("SlimIO", { token });
+    const fullRepositories = await repos(process.env.ORG_NAME || "SlimIO", { token });
     const filteredRepositories = fullRepositories
         .filter((row) => row.archived === false && !packageException.has(row.name.toLowerCase()))
         .map((row) => {
