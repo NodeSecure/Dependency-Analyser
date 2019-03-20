@@ -29,5 +29,8 @@ EXCEPT_PKG=eslint-config,is
 
 Run `npm start` for a full run.. or just run the http server with `npm run skip` (full run must be executed at least one time).
 
+## Known issues
+- If repository name doesn't match the package name it produce Orphan.
+
 ## License
 MIT
