@@ -5,6 +5,9 @@
 
 SlimIO Projects Global Overview
 
+<p align="center">
+    <img src="https://i.imgur.com/DE2sz4D.png" height="400">
+</p>
 ## Requirements
 - Node.js v10 or higher
 
