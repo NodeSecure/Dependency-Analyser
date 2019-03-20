@@ -118,9 +118,9 @@
                 // if something is selected:
                 if (params.nodes.length > 0) {
                     highlightActive = true;
-                    let i, j;
                     const selectedNode = params.nodes[0];
                     const degrees = 2;
+                    let allConnectedNodes = [];
 
                     // mark all nodes as hard to read.
                     for (const nodeId in allNodes) {
@@ -131,15 +131,14 @@
                         }
                     }
                     const connectedNodes = network.getConnectedNodes(selectedNode);
-                    let allConnectedNodes = [];
 
                     // get the second degree nodes
-                    for (j = 0; j < connectedNodes.length; j++) {
-                        allConnectedNodes = allConnectedNodes.concat(network.getConnectedNodes(connectedNodes[j]));
+                    for (let i = 0; i < connectedNodes.length; i++) {
+                        allConnectedNodes = allConnectedNodes.concat(network.getConnectedNodes(connectedNodes[i]));
                     }
 
                     // all second degree nodes get a different color and their label back
-                    for (i = 0; i < allConnectedNodes.length; i++) {
+                    for (let i = 0; i < allConnectedNodes.length; i++) {
                         allNodes[allConnectedNodes[i]].color = '#607D8B';
                         if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
                             allNodes[allConnectedNodes[i]].label = allNodes[allConnectedNodes[i]].hiddenLabel;
@@ -148,7 +147,7 @@
                     }
 
                     // all first degree nodes get their own color and their label back
-                    for (i = 0; i < connectedNodes.length; i++) {
+                    for (let i = 0; i < connectedNodes.length; i++) {
                         allNodes[connectedNodes[i]].color = undefined;
                         if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
                             allNodes[connectedNodes[i]].label = allNodes[connectedNodes[i]].hiddenLabel;
@@ -163,7 +162,8 @@
                         allNodes[selectedNode].hiddenLabel = undefined;
                     }
                 }
-                else if (highlightActive === true) {
+                else if (highlightActive) {
+                    highlightActive = false;
                     for (const nodeId in allNodes) {
                         const fName = idToName.get(Number(nodeId));
                         allNodes[nodeId].color = projects[fName].external ? "#4527a0" : "#2e7d32";
@@ -173,7 +173,6 @@
                             allNodes[nodeId].hiddenLabel = undefined;
                         }
                     }
-                    highlightActive = false
                 }
 
                 // transform the object into an array
