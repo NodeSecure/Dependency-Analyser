@@ -62,12 +62,18 @@
                 info.id = ++id;
                 nodes.push({ id: info.id, label, color: "#2e7d32" });
                 for (const dep of info.extDeps) {
+                    if (!Reflect.has(projects, dep)) {
+                        continue;
+                    }
                     edges.push({ from: info.id, to: projects[dep].id });
                 }
             }
 
             for (const [label, info] of internal) {
                 for (const dep of info.dependOn) {
+                    if (!Reflect.has(projects, dep)) {
+                        continue;
+                    }
                     edges.push({ from: info.id, to: projects[dep].id });
                 }
             }
