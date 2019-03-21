@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     const edges = [];
     let highlightActive = false;
     let activeNode = null;
+    let activeNodeId = null;
     let id = 0;
 
     for (const [label, info] of external) {
@@ -52,8 +53,9 @@ document.addEventListener("DOMContentLoaded", async() => {
     }
 
     const nodesDataset = new vis.DataSet(nodes);
+    const edgesDataset = new vis.DataSet(edges);
     const allNodes = nodesDataset.get({ returnType: "Object" });
-    const data = { nodes: nodesDataset, edges: new vis.DataSet(edges) };
+    const data = { nodes: nodesDataset, edges: edgesDataset };
     const options = {
         nodes: {
             shape: "box",
@@ -84,11 +86,12 @@ document.addEventListener("DOMContentLoaded", async() => {
     network.on("click", neighbourhoodHighlight);
     network.on("click", updateProjectDesc);
 
-    function updateProjectDesc(params) {
+    async function updateProjectDesc(params) {
         const menu = document.getElementById("menu");
 
         if (params.nodes.length > 0) {
-            const selectedNode = idToName.get(params.nodes[0]);
+            const nodeId = params.nodes[0];
+            const selectedNode = idToName.get(nodeId);
             const currProject = projects[selectedNode];
             const template = document.getElementById("project");
 
@@ -96,19 +99,47 @@ document.addEventListener("DOMContentLoaded", async() => {
             const H1 = activeNode.querySelector(".name");
             H1.textContent = selectedNode;
 
-            const span = activeNode.querySelector(".desc");
-            span.textContent = currProject.description;
+            if (currProject.external) {
+                const raw = await fetch(`/${selectedNode}`, {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    }
+                });
+                const manifest = await raw.json();
+                const deps = Object.keys(manifest.dependencies || {});
 
-            const size = activeNode.querySelector(".size");
-            size.textContent = `${currProject.size}kB`;
+                const tId = [];
+                for (const dep of deps) {
+                    const lId = ++id;
+                    nodesDataset.add({ id: lId, label: dep, color: "#2979FF" });
+                    edgesDataset.add({ id: lId, from: nodeId, to: lId });
+                    tId.push(lId);
+                }
+                activeNodeId = tId;
+            }
+            else {
+                const span = activeNode.querySelector(".desc");
+                span.textContent = currProject.description;
 
-            const license = activeNode.querySelector(".license");
-            license.textContent = currProject.license;
+                const size = activeNode.querySelector(".size");
+                size.textContent = `${currProject.size}kB`;
+
+                const license = activeNode.querySelector(".license");
+                license.textContent = currProject.license;
+            }
             menu.appendChild(activeNode);
         }
         else if (activeNode !== null) {
             menu.innerHTML = "";
             activeNode = null;
+            if (activeNodeId !== null) {
+                for (const id of activeNodeId) {
+                    nodesDataset.remove({ id });
+                }
+                activeNodeId = null;
+            }
         }
     }
 
