@@ -25,7 +25,8 @@
         "kleur": "^3.0.2",
         "make-promises-safe": "^4.0.0",
         "polka": "^0.5.2",
-        "repos": "^2.0.0"
+        "repos": "^2.0.0",
+        "serve-static": "^1.13.2"
     },
     "devDependencies": {
         "@commitlint/cli": "^7.5.2",
