@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     }
 
     for (const [label, info] of internal) {
-        for (const dep of info.dependOn) {
+        for (const dep of Object.keys(info.dependOn)) {
             if (!Reflect.has(projects, dep)) {
                 continue;
             }

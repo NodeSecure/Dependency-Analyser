@@ -62,10 +62,9 @@ async function processPackage(repo, URL) {
         });
 
         const pkg = JSON.parse(data);
-        const devDeps = Object.keys(pkg.devDependencies || {}).filter((name) => name.startsWith(npmOrg));
-        const norDeps = Object.keys(pkg.dependencies || {}).filter((name) => name.startsWith(npmOrg));
+        const fullDependencies = Object.assign({}, pkg.dependencies || {}, pkg.devDependencies || {});
+        const deps = Object.keys(fullDependencies).filter((name) => name.startsWith(npmOrg));
         const extDeps = Object.keys(pkg.dependencies || {}).filter((name) => !name.startsWith(npmOrg));
-        const deps = [...new Set([...devDeps, ...norDeps])];
 
         projectLink[repo.name].extDeps = extDeps;
 
@@ -86,9 +85,9 @@ async function processPackage(repo, URL) {
                 continue;
             }
 
-            projectLink[repo.name].dependOn.push(fName);
+            projectLink[repo.name].dependOn[fName] = fullDependencies[dep];
             if (Reflect.has(projectLink, fName)) {
-                projectLink[fName].uses.push(repo.name);
+                projectLink[fName].uses[repo.name] = fullDependencies[dep];
             }
             else {
                 orphans.add(fName);
@@ -125,8 +124,8 @@ async function main() {
                 size: row.size || 0,
                 license: license.name || "N/A",
                 description: row.description || "",
-                uses: [],
-                dependOn: []
+                uses: {},
+                dependOn: {}
             });
 
             return {
