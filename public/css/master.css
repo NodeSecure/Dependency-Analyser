@@ -11,9 +11,13 @@ body {
     justify-content: center;
 }
 
-#network {
-    width: 96vw;
-    height: 96vh;
-    margin-top: calc(2vh - 4px);
-    border: 2px solid lightgray;
+section#menu {
+    width: 300px;
+    background: #ECEFF1;
+    border-right: 2px solid #CFD8DC;
+}
+
+section#network {
+    flex-grow: 1;
+    height: 100vh;
 }
