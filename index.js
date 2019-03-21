@@ -11,7 +11,7 @@ const { get } = require("httpie");
 const polka = require("polka");
 const send = require("@polka/send-type");
 const serve = require("serve-static");
-const libnpm = require("libnpm");
+const pacote = require("pacote");
 
 // CONSTANTS
 const VIEW_DIR = join(__dirname, "views");
@@ -33,12 +33,15 @@ async function startHTTPServer(data = {}) {
         .use(serve(join(__dirname, "public")))
         .get("/", (req, res) => send(res, 200, view, { "Content-Type": "text/html" }))
         .get("/data", (req, res) => send(res, 200, data))
-        .get("/:pkg", async(req, res) => {
-            const pkg = req.params.pkg;
+        .get("/:pkg/:org?", async(req, res) => {
+            const { pkg, org } = req.params;
             if (typeof pkg !== "string" || pkg.length === 0) {
                 return send(res, 401, "Pkg must be a string");
             }
-            const manifest = await libnpm.manifest(pkg);
+
+            const manifest = await pacote.manifest(
+                typeof org === "undefined" ? pkg : `${org}/${pkg}`
+            );
 
             return send(res, 200, manifest);
         })
