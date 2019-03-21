@@ -66,6 +66,7 @@ async function processPackage(repo, URL) {
         const deps = Object.keys(fullDependencies).filter((name) => name.startsWith(npmOrg));
         const extDeps = Object.keys(pkg.dependencies || {}).filter((name) => !name.startsWith(npmOrg));
 
+        projectLink[repo.name].currVersion = pkg.version;
         projectLink[repo.name].extDeps = extDeps;
 
         const cleanPkgName = pkg.name.startsWith("@") ? pkg.name.split("/")[1].toLowerCase() : pkg.name.toLowerCase();
@@ -118,6 +119,7 @@ async function main() {
 
             projectLink[name] = Object.seal({
                 extDeps: [],
+                currVersion: null,
                 url: row.html_url,
                 private: row.private,
                 external: false,

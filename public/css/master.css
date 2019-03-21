@@ -24,35 +24,48 @@ body {
     position: relative;
 }
 
+hr {
+    border: 1px solid #263238;
+    width: 95%;
+}
+
 section#menu {
-    width: 250px;
+    width: 230px;
     background: #37474F;
     display: flex;
     flex-direction: column;
-    padding: 5px;
+    padding: 12px;
     position: absolute;
     left: 10px;
     top: 10px;
     z-index: 9999;
-    border: 1px solid #FFF9C4;
+    border: 1px solid #263238;
     border-radius: 2px;
     color: #ECEFF1;
     box-shadow: 1px 1px 10px #000;
+    font-family: Roboto;
 }
+    section#menu h1 {
+        color: #F4511E
+    }
     section#menu > p {
         text-align: center;
         font-size: 16px;
+        font-family: Roboto;
     }
     section#menu span {
         font-size: 14px;
         margin-top: 5px;
         text-align: justify;
+        font-family: Roboto;
     }
     section#menu b {
-        color: #FFEA00;
+        color: #F4511E;
+        font-family: Roboto;
     }
     section#menu ul li {
         font-size: 14px;
+        font-family: Roboto;
     }
 
 section#network {

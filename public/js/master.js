@@ -128,6 +128,11 @@ document.addEventListener("DOMContentLoaded", async() => {
                 activeNodeId = tId;
             }
             else {
+                const usesVer = {};
+                for (const dep of Object.keys(currProject.uses)) {
+                    usesVer[dep] = projects[dep].dependOn[selectedNode];
+                }
+
                 const span = activeNode.querySelector(".desc");
                 span.textContent = currProject.description;
 
@@ -136,6 +141,18 @@ document.addEventListener("DOMContentLoaded", async() => {
 
                 const license = activeNode.querySelector(".license");
                 license.textContent = currProject.license;
+
+                const version = activeNode.querySelector(".version");
+                version.textContent = currProject.currVersion || "v0.0.1";
+
+                const vsd = activeNode.querySelector(".vsd");
+                const fragment = document.createDocumentFragment();
+                for (const [name, version] of Object.entries(usesVer)) {
+                    const li = document.createElement("li");
+                    li.innerHTML = `${name}: <b>${version}</b>`;
+                    fragment.appendChild(li);
+                }
+                vsd.appendChild(fragment);
             }
             menu.appendChild(activeNode);
         }
