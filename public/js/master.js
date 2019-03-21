@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     const nodes = [];
     const edges = [];
     let highlightActive = false;
+    let activeNode = null;
     let id = 0;
 
     for (const [label, info] of external) {
@@ -81,6 +82,35 @@ document.addEventListener("DOMContentLoaded", async() => {
     // initialize your network!
     const network = new vis.Network(container, data, options);
     network.on("click", neighbourhoodHighlight);
+    network.on("click", updateProjectDesc);
+
+    function updateProjectDesc(params) {
+        const menu = document.getElementById("menu");
+
+        if (params.nodes.length > 0) {
+            const selectedNode = idToName.get(params.nodes[0]);
+            const currProject = projects[selectedNode];
+            const template = document.getElementById("project");
+
+            activeNode = document.importNode(template.content, true);
+            const H1 = activeNode.querySelector(".name");
+            H1.textContent = selectedNode;
+
+            const span = activeNode.querySelector(".desc");
+            span.textContent = currProject.description;
+
+            const size = activeNode.querySelector(".size");
+            size.textContent = `${currProject.size}kB`;
+
+            const license = activeNode.querySelector(".license");
+            license.textContent = currProject.license;
+            menu.appendChild(activeNode);
+        }
+        else if (activeNode !== null) {
+            menu.innerHTML = "";
+            activeNode = null;
+        }
+    }
 
     function neighbourhoodHighlight(params) {
         // if something is selected:
@@ -101,12 +131,12 @@ document.addEventListener("DOMContentLoaded", async() => {
             const connectedNodes = network.getConnectedNodes(selectedNode);
 
             // get the second degree nodes
-            for (let id = 0; i < connectedNodes.length; i++) {
+            for (let id = 0; id < connectedNodes.length; id++) {
                 allConnectedNodes = allConnectedNodes.concat(network.getConnectedNodes(connectedNodes[id]));
             }
 
             // all second degree nodes get a different color and their label back
-            for (let id = 0; i < allConnectedNodes.length; i++) {
+            for (let id = 0; id < allConnectedNodes.length; id++) {
                 allNodes[allConnectedNodes[id]].color = "#607D8B";
                 if (allNodes[allConnectedNodes[id]].hiddenLabel !== undefined) {
                     allNodes[allConnectedNodes[id]].label = allNodes[allConnectedNodes[id]].hiddenLabel;
@@ -115,7 +145,7 @@ document.addEventListener("DOMContentLoaded", async() => {
             }
 
             // all first degree nodes get their own color and their label back
-            for (let id = 0; i < connectedNodes.length; i++) {
+            for (let id = 0; id < connectedNodes.length; id++) {
                 allNodes[connectedNodes[id]].color = undefined;
                 if (allNodes[connectedNodes[id]].hiddenLabel !== undefined) {
                     allNodes[connectedNodes[id]].label = allNodes[connectedNodes[id]].hiddenLabel;

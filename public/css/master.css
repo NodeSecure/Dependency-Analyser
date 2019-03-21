@@ -1,21 +1,40 @@
-body, html {
-    padding: 0;
+body, html, div, ul, li, p, span, b, h1, h2, h3, h4, h5, h6, label, input {
     margin: 0;
+    padding: 0;
+}
+
+body, html {
     height: 100%;
     font-family: "Roboto", sans-serif;
+    font-size: 16px;
 }
 
 body {
     display: flex;
     align-content: center;
     justify-content: center;
+    position: relative;
 }
 
 section#menu {
     width: 300px;
-    background: #ECEFF1;
-    border-right: 2px solid #CFD8DC;
+    height: calc(100vh - 20px);
+    background: rgba(236, 239, 241, 0.95);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 9999;
 }
+    section#menu span {
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    section#menu b {
+        color: #06F;
+    }
 
 section#network {
     flex-grow: 1;
