@@ -119,6 +119,8 @@ async function main() {
 
             projectLink[name] = Object.seal({
                 extDeps: [],
+                url: row.html_url,
+                private: row.private,
                 external: false,
                 size: row.size || 0,
                 license: license.name || "N/A",
