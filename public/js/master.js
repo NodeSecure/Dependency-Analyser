@@ -117,10 +117,13 @@ document.addEventListener("DOMContentLoaded", async() => {
                 const manifest = await raw.json();
                 const deps = Object.keys(manifest.dependencies || {});
 
+                console.log(params.pointer.canvas.x);
+
                 const tId = [];
                 for (const dep of deps) {
                     const lId = ++id;
-                    nodesDataset.add({ id: lId, label: dep, color: "#2979FF" });
+                    // eslint-disable-next-line
+                    nodesDataset.add({ id: lId, label: dep, color: "#2979FF", x: params.pointer.canvas.x, y: params.pointer.canvas.y });
                     edgesDataset.add({ id: lId, from: nodeId, to: lId });
                     tId.push(lId);
                 }
