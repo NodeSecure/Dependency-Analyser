@@ -23,6 +23,7 @@
         "dotenv": "^7.0.0",
         "httpie": "^1.1.1",
         "kleur": "^3.0.2",
+        "libnpm": "^2.0.1",
         "make-promises-safe": "^4.0.0",
         "polka": "^0.5.2",
         "repos": "^2.0.0",

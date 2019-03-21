@@ -117,7 +117,6 @@ document.addEventListener("DOMContentLoaded", async() => {
         if (params.nodes.length > 0) {
             highlightActive = true;
             const selectedNode = params.nodes[0];
-            const degrees = 2;
             let allConnectedNodes = [];
 
             // mark all nodes as hard to read.
