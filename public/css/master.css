@@ -2,6 +2,9 @@ body, html, div, ul, li, p, span, b, h1, h2, h3, h4, h5, h6, label, input {
     margin: 0;
     padding: 0;
 }
+li {
+    list-style: none;
+}
 
 body, html {
     height: 100%;
@@ -17,23 +20,32 @@ body {
 }
 
 section#menu {
-    width: 300px;
-    height: calc(100vh - 20px);
+    width: 280px;
     background: rgba(236, 239, 241, 0.95);
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 5px;
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 10px;
+    top: 10px;
     z-index: 9999;
+    border: 2px solid #CCC;
+    border-radius: 2px;
 }
+    section#menu > p {
+        text-align: center;
+        font-size: 16px;
+    }
     section#menu span {
         font-size: 14px;
         margin-top: 5px;
+        text-align: justify;
     }
     section#menu b {
         color: #06F;
+    }
+    section#menu ul li {
+        font-size: 14px;
     }
 
 section#network {

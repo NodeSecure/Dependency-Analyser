@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", async() => {
         const menu = document.getElementById("menu");
 
         if (params.nodes.length > 0) {
+            menu.innerHTML = "";
             const nodeId = params.nodes[0];
             const selectedNode = idToName.get(nodeId);
             const currProject = projects[selectedNode];
@@ -100,7 +101,13 @@ document.addEventListener("DOMContentLoaded", async() => {
             H1.textContent = selectedNode;
 
             if (currProject.external) {
-                const raw = await fetch(`/${selectedNode}`, {
+                let uri = `/${selectedNode}`;
+                if (selectedNode.startsWith("@")) {
+                    const [org, name] = selectedNode.split("/");
+                    uri = `/${name}/${org}`;
+                }
+
+                const raw = await fetch(uri, {
                     method: "GET",
                     headers: {
                         Accept: "application/json",
@@ -132,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async() => {
             menu.appendChild(activeNode);
         }
         else if (activeNode !== null) {
-            menu.innerHTML = "";
+            menu.innerHTML = "<p>Select a project</p>";
             activeNode = null;
             if (activeNodeId !== null) {
                 for (const id of activeNodeId) {
