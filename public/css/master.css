@@ -10,6 +10,11 @@ body, html {
     height: 100%;
     font-family: "Roboto", sans-serif;
     font-size: 16px;
+    background: rgb(39,50,56);
+    background: -moz-radial-gradient(center, ellipse cover, rgba(39,50,56,1) 1%, rgba(22,30,33,1) 100%);
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(39,50,56,1) 1%,rgba(22,30,33,1) 100%);
+    background: radial-gradient(ellipse at center, rgba(39,50,56,1) 1%,rgba(22,30,33,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#273238', endColorstr='#161e21',GradientType=1 );
 }
 
 body {
@@ -20,8 +25,8 @@ body {
 }
 
 section#menu {
-    width: 280px;
-    background: rgba(236, 239, 241, 0.95);
+    width: 250px;
+    background: #37474F;
     display: flex;
     flex-direction: column;
     padding: 5px;
@@ -29,8 +34,10 @@ section#menu {
     left: 10px;
     top: 10px;
     z-index: 9999;
-    border: 2px solid #CCC;
+    border: 1px solid #FFF9C4;
     border-radius: 2px;
+    color: #ECEFF1;
+    box-shadow: 1px 1px 10px #000;
 }
     section#menu > p {
         text-align: center;
@@ -42,7 +49,7 @@ section#menu {
         text-align: justify;
     }
     section#menu b {
-        color: #06F;
+        color: #FFEA00;
     }
     section#menu ul li {
         font-size: 14px;

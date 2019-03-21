@@ -19,12 +19,12 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     for (const [label, info] of external) {
         info.id = ++id;
-        nodes.push({ id: info.id, label, color: "#4527a0" });
+        nodes.push({ id: info.id, label, color: "#673AB7" });
     }
 
     for (const [label, info] of internal) {
         info.id = ++id;
-        nodes.push({ id: info.id, label, color: "#2e7d32" });
+        nodes.push({ id: info.id, label, color: "#E65100" });
         for (const dep of info.extDeps) {
             if (!Reflect.has(projects, dep)) {
                 continue;
@@ -117,8 +117,6 @@ document.addEventListener("DOMContentLoaded", async() => {
                 const manifest = await raw.json();
                 const deps = Object.keys(manifest.dependencies || {});
 
-                console.log(params.pointer.canvas.x);
-
                 const tId = [];
                 for (const dep of deps) {
                     const lId = ++id;
@@ -162,7 +160,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
             // mark all nodes as hard to read.
             for (const nodeId in allNodes) {
-                allNodes[nodeId].color = "rgba(200, 200, 200, 0.35)";
+                allNodes[nodeId].color = "rgba(200, 200, 200, 0.10)";
                 if (allNodes[nodeId].hiddenLabel === undefined) {
                     allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
                     allNodes[nodeId].label = undefined;
@@ -204,7 +202,7 @@ document.addEventListener("DOMContentLoaded", async() => {
             highlightActive = false;
             for (const nodeId in allNodes) {
                 const fName = idToName.get(Number(nodeId));
-                allNodes[nodeId].color = projects[fName].external ? "#4527a0" : "#2e7d32";
+                allNodes[nodeId].color = projects[fName].external ? "#673AB7" : "#E65100";
 
                 if (allNodes[nodeId].hiddenLabel !== undefined) {
                     allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
