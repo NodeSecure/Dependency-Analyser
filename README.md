@@ -6,7 +6,7 @@
 SlimIO Projects Global Overview. This project has been primaly designed for SlimIO but work with any kind of organisation who want to achieve a similar result.
 
 <p align="center">
-    <img src="https://i.imgur.com/DE2sz4D.png" height="400">
+    <img src="https://i.imgur.com/O6X6bPa.png" height="400" style="border: 2px solid #CCC">
 </p>
 
 ## Requirements
