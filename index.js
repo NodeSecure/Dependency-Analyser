@@ -15,7 +15,7 @@ const pacote = require("pacote");
 
 // CONSTANTS
 const VIEW_DIR = join(__dirname, "views");
-const LINK_FILE = join(__dirname, "data", "link.json");
+const LINK_FILE = join(__dirname, "data", `${process.env.ORG_NAME}.json`);
 
 // Globals
 const token = process.env.GIT_TOKEN;
@@ -168,7 +168,7 @@ async function main() {
     console.log(`\nOrphans: ${[...orphans]}`);
 
     // Write file on the disk!
-    await writeFile(join(__dirname, "data", "link.json"), JSON.stringify(projectLink, null, 4));
+    await writeFile(join(__dirname, "data", `${process.env.ORG_NAME}.json`), JSON.stringify(projectLink, null, 4));
     await startHTTPServer(projectLink);
 
     return void 0;
