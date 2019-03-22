@@ -59,4 +59,4 @@ typings/
 
 # JSDoc
 docs/
-data/link.json
+data/*
