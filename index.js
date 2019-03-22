@@ -69,11 +69,11 @@ async function processPackage(repo, URL) {
         projectLink[repo.name].currVersion = pkg.version;
         projectLink[repo.name].extDeps = extDeps;
 
-        const cleanPkgName = pkg.name.startsWith("@") ? pkg.name.split("/")[1].toLowerCase() : pkg.name.toLowerCase();
-        if (cleanPkgName !== repo.name) {
-            console.log(`Detected different pkg/repo name, package => ${cleanPkgName}, repository => ${repo.name}`);
-            projectLink[cleanPkgName] = projectLink[repo.name];
-        }
+        // const cleanPkgName = pkg.name.startsWith("@") ? pkg.name.split("/")[1].toLowerCase() : pkg.name.toLowerCase();
+        // if (cleanPkgName !== repo.name) {
+        //     console.log(`Detected different pkg/repo name, package => ${cleanPkgName}, repository => ${repo.name}`);
+        //     projectLink[cleanPkgName] = projectLink[repo.name];
+        // }
 
         for (const dep of extDeps) {
             fullExtDeps.add(dep);

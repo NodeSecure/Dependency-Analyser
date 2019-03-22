@@ -58,14 +58,27 @@ document.addEventListener("DOMContentLoaded", async() => {
     const data = { nodes: nodesDataset, edges: edgesDataset };
     const options = {
         nodes: {
+            mass: 1.5,
             shape: "box",
             size: 24,
             font: {
                 face: "Roboto",
                 vadjust: 0.5,
                 size: 22,
-                color: "#FFF"
+                color: "#ECEFF1",
+                bold: "22px"
+            },
+            margin: 7.5,
+            shadow: {
+                enabled: true,
+                color: "rgba(20, 20, 20, 0.2)"
             }
+        },
+        edges: {
+            arrows: "from",
+            hoverWidth: 2,
+            selectionWidth: 2,
+            width: 1.2
         },
         physics: {
             forceAtlas2Based: {
@@ -177,7 +190,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
             // mark all nodes as hard to read.
             for (const nodeId in allNodes) {
-                allNodes[nodeId].color = "rgba(200, 200, 200, 0.10)";
+                allNodes[nodeId].color = "rgba(200, 200, 200, 0.05)";
                 if (allNodes[nodeId].hiddenLabel === undefined) {
                     allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
                     allNodes[nodeId].label = undefined;

@@ -27,6 +27,7 @@ body {
 hr {
     border: 1px solid #263238;
     width: 95%;
+    height: 1px;
 }
 
 section#menu {
@@ -39,14 +40,13 @@ section#menu {
     left: 10px;
     top: 10px;
     z-index: 9999;
-    border: 1px solid #263238;
-    border-radius: 2px;
+    border-radius: 4px;
     color: #ECEFF1;
-    box-shadow: 1px 1px 10px #000;
+    box-shadow: 1px 1px 10px rgba(20, 20, 20, 0.8);
     font-family: Roboto;
 }
     section#menu h1 {
-        color: #F4511E
+        color: #FF9800
     }
     section#menu > p {
         text-align: center;
@@ -60,13 +60,17 @@ section#menu {
         font-family: Roboto;
     }
     section#menu b {
-        color: #F4511E;
+        color: #FF9800;
         font-family: Roboto;
     }
     section#menu ul li {
         font-size: 14px;
         font-family: Roboto;
+        display: flex;
     }
+        section#menu ul li > b {
+            margin-left: auto;
+        }
 
 section#network {
     flex-grow: 1;
