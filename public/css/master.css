@@ -63,6 +63,11 @@ section#menu {
         color: #FF9800;
         font-family: Roboto;
     }
+    section#menu ul {
+        max-height: 60vh;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
     section#menu ul li {
         font-size: 14px;
         font-family: Roboto;
