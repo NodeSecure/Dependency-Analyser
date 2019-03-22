@@ -67,7 +67,11 @@ async function processPackage(repo, URL) {
         const extDeps = Object.keys(pkg.dependencies || {}).filter((name) => !name.startsWith(npmOrg));
 
         projectLink[repo.name].currVersion = pkg.version;
-        projectLink[repo.name].extDeps = extDeps;
+        projectLink[repo.name].extDeps = extDeps.reduce((prev, curr) => {
+            prev[curr] = fullDependencies[curr];
+
+            return prev;
+        }, {});
 
         // const cleanPkgName = pkg.name.startsWith("@") ? pkg.name.split("/")[1].toLowerCase() : pkg.name.toLowerCase();
         // if (cleanPkgName !== repo.name) {
@@ -146,8 +150,18 @@ async function main() {
     await Promise.all(promises);
 
     for (const dep of fullExtDeps) {
+        const uses = {};
+        for (const [name, info] of Object.entries(projectLink)) {
+            if (info.external) {
+                continue;
+            }
+
+            if (Reflect.has(info.extDeps, dep)) {
+                uses[name] = info.extDeps[dep];
+            }
+        }
         projectLink[dep] = {
-            external: true
+            external: true, uses
         };
     }
     console.timeEnd("gen_link");
