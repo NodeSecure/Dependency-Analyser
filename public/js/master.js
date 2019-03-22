@@ -7,8 +7,9 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     });
     const projects = await raw.json();
-    const internal = Object.entries(projects).filter(([, info]) => !info.external);
-    const external = Object.entries(projects).filter(([, info]) => info.external);
+    const projectsEntries = Object.entries(projects).filter(([, info]) => !info.link);
+    const internal = projectsEntries.filter(([, info]) => !info.external);
+    const external = projectsEntries.filter(([, info]) => info.external);
 
     const nodes = [];
     const edges = [];
@@ -119,10 +120,10 @@ document.addEventListener("DOMContentLoaded", async() => {
                     usesVer[dep] = projects[dep].extDeps[selectedNode];
                 }
 
-                let uri = `/${selectedNode}`;
+                let uri = `/api/${selectedNode}`;
                 if (selectedNode.startsWith("@")) {
                     const [org, name] = selectedNode.split("/");
-                    uri = `/${name}/${org}`;
+                    uri = `/api/${name}/${org}`;
                 }
 
                 const raw = await fetch(uri, {
@@ -147,6 +148,9 @@ document.addEventListener("DOMContentLoaded", async() => {
             }
             else {
                 for (const dep of Object.keys(currProject.uses)) {
+                    if (!Reflect.has(projects, dep) || projects[dep].external) {
+                        continue;
+                    }
                     usesVer[dep] = projects[dep].dependOn[selectedNode];
                 }
 

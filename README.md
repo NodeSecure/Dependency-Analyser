@@ -24,6 +24,8 @@ Then create a local `.env` file with a Personal Github token
 GIT_TOKEN=
 HTTP_PORT=1337
 ORG_NAME=SlimIO
+NPM_NAME=@slimio
+FILTER_ORG=ok
 EXCEPT_PKG=eslint-config,is
 ```
 

@@ -16,14 +16,16 @@ const pacote = require("pacote");
 // CONSTANTS
 const VIEW_DIR = join(__dirname, "views");
 const LINK_FILE = join(__dirname, "data", `${process.env.ORG_NAME}.json`);
+const FILTER_ORG = process.env.FILTER_ORG || "ok";
 
 // Globals
 const token = process.env.GIT_TOKEN;
 const projectLink = Object.create(null);
-const orphans = new Set();
+const orphans = [];
+const repoPkgLinker = new Map();
 const fullExtDeps = new Set();
 const packageException = new Set((process.env.EXCEPT_PKG || "").split(","));
-const npmOrg = `@${process.env.ORG_NAME.toLowerCase()}`;
+const npmOrg = process.env.NPM_NAME || `@${process.env.ORG_NAME.toLowerCase()}`;
 
 async function startHTTPServer(data = {}) {
     const port = process.env.HTTP_PORT || 1337;
@@ -33,7 +35,7 @@ async function startHTTPServer(data = {}) {
         .use(serve(join(__dirname, "public")))
         .get("/", (req, res) => send(res, 200, view, { "Content-Type": "text/html" }))
         .get("/data", (req, res) => send(res, 200, data))
-        .get("/:pkg/:org?", async(req, res) => {
+        .get("/api/:pkg/:org?", async(req, res) => {
             const { pkg, org } = req.params;
             if (typeof pkg !== "string" || pkg.length === 0) {
                 return send(res, 401, "Pkg must be a string");
@@ -63,8 +65,12 @@ async function processPackage(repo, URL) {
 
         const pkg = JSON.parse(data);
         const fullDependencies = Object.assign({}, pkg.dependencies || {}, pkg.devDependencies || {});
-        const deps = Object.keys(fullDependencies).filter((name) => name.startsWith(npmOrg));
-        const extDeps = Object.keys(pkg.dependencies || {}).filter((name) => !name.startsWith(npmOrg));
+        let deps = Object.keys(fullDependencies);
+        let extDeps = Object.keys(pkg.dependencies || {});
+        if (FILTER_ORG === "ok") {
+            deps = deps.filter((name) => name.startsWith(npmOrg));
+            extDeps = extDeps.filter((name) => !name.startsWith(npmOrg));
+        }
 
         projectLink[repo.name].currVersion = pkg.version;
         projectLink[repo.name].extDeps = extDeps.reduce((prev, curr) => {
@@ -73,34 +79,33 @@ async function processPackage(repo, URL) {
             return prev;
         }, {});
 
-        // const cleanPkgName = pkg.name.startsWith("@") ? pkg.name.split("/")[1].toLowerCase() : pkg.name.toLowerCase();
-        // if (cleanPkgName !== repo.name) {
-        //     console.log(`Detected different pkg/repo name, package => ${cleanPkgName}, repository => ${repo.name}`);
-        //     projectLink[cleanPkgName] = projectLink[repo.name];
-        // }
+        const cleanPkgName = pkg.name.startsWith("@") ? pkg.name.split("/")[1].toLowerCase() : pkg.name.toLowerCase();
+        if (cleanPkgName !== repo.name) {
+            // console.log(`cleanPkg => ${cleanPkgName}, repo => ${repo.name}`);
+            repoPkgLinker.set(cleanPkgName, repo.name);
+        }
 
         for (const dep of extDeps) {
             fullExtDeps.add(dep);
         }
 
         for (const dep of deps) {
-            const [, name] = dep.split("/");
-            const fName = name.toLowerCase();
+            const fName = dep.includes("/") ? dep.split("/")[1].toLowerCase() : dep;
             if (packageException.has(fName)) {
                 continue;
             }
 
-            projectLink[repo.name].dependOn[fName] = fullDependencies[dep];
             if (Reflect.has(projectLink, fName)) {
+                projectLink[repo.name].dependOn[fName] = fullDependencies[dep];
                 projectLink[fName].uses[repo.name] = fullDependencies[dep];
             }
             else {
-                orphans.add(fName);
+                orphans.push([fName, repo.name, fullDependencies[dep], dep]);
             }
         }
     }
     catch (err) {
-        console.log(red(`Failed to retrieve project: ${yellow(repo.fullName)}`));
+        console.log(red(`Failed to retrieve project: ${yellow(repo.fullName)}, ${err.message}`));
     }
 }
 
@@ -123,6 +128,7 @@ async function main() {
 
             projectLink[name] = Object.seal({
                 extDeps: [],
+                link: false,
                 currVersion: null,
                 url: row.html_url,
                 private: row.private,
@@ -152,7 +158,7 @@ async function main() {
     for (const dep of fullExtDeps) {
         const uses = {};
         for (const [name, info] of Object.entries(projectLink)) {
-            if (info.external) {
+            if (info.external || info.link) {
                 continue;
             }
 
@@ -161,11 +167,31 @@ async function main() {
             }
         }
         projectLink[dep] = {
-            external: true, uses
+            external: true,
+            link: false,
+            uses
         };
     }
+
+
+    // console.log(repoPkgLinker);
+    for (let id = 0; id < orphans.length; id++) {
+        const [name, repoName, value] = orphans[id];
+        if (!repoPkgLinker.has(name)) {
+            continue;
+        }
+        const fixName = repoPkgLinker.get(name);
+        const fixRepoName = Reflect.has(projectLink, repoName) ? repoName : repoPkgLinker.get(repoName) || repoName;
+
+        projectLink[fixName].uses[fixRepoName] = value;
+        if (!projectLink[fixRepoName].external) {
+            projectLink[fixRepoName].dependOn[fixName] = value;
+        }
+    }
+
     console.timeEnd("gen_link");
-    console.log(`\nOrphans: ${[...orphans]}`);
+    console.log("\nOrphans: ");
+    console.log(orphans);
 
     // Write file on the disk!
     await writeFile(join(__dirname, "data", `${process.env.ORG_NAME}.json`), JSON.stringify(projectLink, null, 4));
