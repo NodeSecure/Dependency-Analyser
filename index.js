@@ -35,6 +35,22 @@ async function startHTTPServer(data = {}) {
         .use(serve(join(__dirname, "public")))
         .get("/", (req, res) => send(res, 200, view, { "Content-Type": "text/html" }))
         .get("/data", (req, res) => send(res, 200, data))
+        .get("/api/size/:pkg/:org?", async(req, res) => {
+            const { pkg, org } = req.params;
+            if (typeof pkg !== "string" || pkg.length === 0) {
+                return send(res, 401, "Pkg must be a string");
+            }
+
+            const name = typeof org === "undefined" ? pkg : `${org}/${pkg}`;
+            try {
+                const { data } = await get(`https://bundlephobia.com/api/size?package=${name}`);
+
+                return send(res, 200, data);
+            }
+            catch (err) {
+                return send(res, 500, err.statusMessage);
+            }
+        })
         .get("/api/:pkg/:org?", async(req, res) => {
             const { pkg, org } = req.params;
             if (typeof pkg !== "string" || pkg.length === 0) {
