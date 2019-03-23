@@ -41,7 +41,7 @@ async function startHTTPServer(data = {}) {
                 return send(res, 401, "Pkg must be a string");
             }
 
-            const name = typeof org === "undefined" ? pkg : `${org}/${pkg}`;
+            const name = typeof org === "undefined" ? pkg : `@${org}/${pkg}`;
             try {
                 const { data } = await get(`https://bundlephobia.com/api/size?package=${name}`);
 

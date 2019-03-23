@@ -1,4 +1,17 @@
 document.addEventListener("DOMContentLoaded", async() => {
+
+    function formatBytes(bytes, decimals) {
+        if (bytes === 0) {
+            return "0 B";
+        }
+        const dm = decimals <= 0 ? 0 : decimals || 2;
+        const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+        const id = Math.floor(Math.log(bytes) / Math.log(1024));
+
+        // eslint-disable-next-line
+        return parseFloat((bytes / Math.pow(1024, id)).toFixed(dm)) + ' ' + sizes[id];
+    }
+
     const raw = await fetch("/data", {
         method: "GET",
         headers: {
@@ -158,7 +171,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                 span.textContent = currProject.description;
 
                 const size = activeNode.querySelector(".size");
-                size.textContent = `${currProject.size}kB`;
+                size.textContent = formatBytes(currProject.size);
 
                 const license = activeNode.querySelector(".license");
                 license.textContent = currProject.license;
@@ -166,6 +179,31 @@ document.addEventListener("DOMContentLoaded", async() => {
                 const version = activeNode.querySelector(".version");
                 version.textContent = currProject.currVersion || "v0.0.1";
             }
+
+            // BundlePhobia
+            let uri = currProject.external ? `/api/size/${selectedNode}` : `/api/size/${selectedNode}/slimio`;
+            if (selectedNode.startsWith("@")) {
+                const [org, name] = selectedNode.split("/");
+                uri = `/api/size/${name}/${org}`;
+            }
+
+            const raw = await fetch(uri, {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                }
+            });
+            const size = await raw.json();
+            const bunMin = activeNode.querySelector(".bun_min");
+            bunMin.textContent = formatBytes(size.size);
+
+            const bunGZIP = activeNode.querySelector(".bun_gzip");
+            bunGZIP.textContent = formatBytes(size.gzip);
+
+            const fullSize = size.dependencySizes.reduce((prev, curr) => prev + curr.approximateSize, 0);
+            const bunFull = activeNode.querySelector(".bun_full");
+            bunFull.textContent = formatBytes(fullSize);
 
             const vsd = activeNode.querySelector(".vsd");
             const fragment = document.createDocumentFragment();
