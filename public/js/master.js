@@ -158,6 +158,12 @@ document.addEventListener("DOMContentLoaded", async() => {
                     tId.push(lId);
                 }
                 activeNodeId = tId;
+
+                const size = activeNode.querySelector(".li_size");
+                const license = activeNode.querySelector(".li_license");
+
+                size.style.display = "none";
+                license.style.display = "none";
             }
             else {
                 for (const dep of Object.keys(currProject.uses)) {
@@ -181,29 +187,35 @@ document.addEventListener("DOMContentLoaded", async() => {
             }
 
             // BundlePhobia
-            let uri = currProject.external ? `/api/size/${selectedNode}` : `/api/size/${selectedNode}/slimio`;
+            let uri = currProject.external ? `/api/size/${selectedNode}` : `/api/size/${selectedNode}/@slimio`;
             if (selectedNode.startsWith("@")) {
                 const [org, name] = selectedNode.split("/");
                 uri = `/api/size/${name}/${org}`;
             }
 
-            const raw = await fetch(uri, {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json"
-                }
-            });
-            const size = await raw.json();
-            const bunMin = activeNode.querySelector(".bun_min");
-            bunMin.textContent = formatBytes(size.size);
+            try {
+                const raw = await fetch(uri, {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    }
+                });
+                const size = await raw.json();
+                const bunMin = activeNode.querySelector(".bun_min");
+                bunMin.textContent = formatBytes(size.size);
 
-            const bunGZIP = activeNode.querySelector(".bun_gzip");
-            bunGZIP.textContent = formatBytes(size.gzip);
+                const bunGZIP = activeNode.querySelector(".bun_gzip");
+                bunGZIP.textContent = formatBytes(size.gzip);
 
-            const fullSize = size.dependencySizes.reduce((prev, curr) => prev + curr.approximateSize, 0);
-            const bunFull = activeNode.querySelector(".bun_full");
-            bunFull.textContent = formatBytes(fullSize);
+                const fullSize = size.dependencySizes.reduce((prev, curr) => prev + curr.approximateSize, 0);
+                const bunFull = activeNode.querySelector(".bun_full");
+                bunFull.textContent = formatBytes(fullSize);
+            }
+            catch (err) {
+                activeNode.getElementById("bundle").classList.add("hide");
+                activeNode.querySelector(".npm_size").style.display = "none";
+            }
 
             const vsd = activeNode.querySelector(".vsd");
             const fragment = document.createDocumentFragment();

@@ -85,6 +85,7 @@ section#menu {
     section#menu ul {
         max-height: 60vh;
         overflow-y: auto;
+        margin-bottom: 5px;
     }
     section#menu ul li {
         font-size: 14px;
@@ -100,13 +101,22 @@ section#menu {
             margin-right: 5px;
         }
 
+    section#menu > p {
+        font-size: 12px;
+        text-align: center;
+        margin-top: 8px;
+    }
+
     section#menu section#bundle {
         height: 60px;
-        margin-top: 10px;
+        margin-top: 4px;
         margin-bottom: 5px;
         display: flex;
         padding: 5px;
     }
+        section#menu section#bundle.hide {
+            display: none;
+        }
         section#menu section#bundle > section {
             flex-basis: 80px;
             flex-shrink: 0;
