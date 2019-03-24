@@ -1,53 +1,42 @@
 document.addEventListener("DOMContentLoaded", async() => {
+    // HTML Elements
+    const container = document.getElementById("network");
+    const template = document.getElementById("project");
 
-    function formatBytes(bytes, decimals) {
-        if (bytes === 0) {
-            return "0 B";
-        }
-        const dm = decimals <= 0 ? 0 : decimals || 2;
-        const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-        const id = Math.floor(Math.log(bytes) / Math.log(1024));
+    // CONSTANTS (for nodes colors)
+    const C_EXT = "#673AB7";
+    const C_INT = "#E65100";
+    const C_OFF = "#607D8B";
+    const C_TRS = "rgba(200, 200, 200, 0.05)";
 
-        // eslint-disable-next-line
-        return parseFloat((bytes / Math.pow(1024, id)).toFixed(dm)) + ' ' + sizes[id];
-    }
-
-    const raw = await fetch("/data", {
-        method: "GET",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        }
-    });
-    const projects = await raw.json();
-    const projectsEntries = Object.entries(projects).filter(([, info]) => !info.link);
-    const internal = projectsEntries.filter(([, info]) => !info.external);
-    const external = projectsEntries.filter(([, info]) => info.external);
-
+    // Globals
     const nodes = [];
     const edges = [];
+    const idToName = new Map();
     let highlightActive = false;
     let activeNode = null;
     let activeNodeId = null;
-    let id = 0;
+    let id = 5000;
 
-    for (const [label, info] of external) {
-        info.id = ++id;
-        nodes.push({ id: info.id, label, color: "#673AB7" });
-    }
+    // Fetch data
+    const projects = await request("/data");
+    const projectsEntries = Object.entries(projects).filter(([, info]) => !info.link);
 
-    for (const [label, info] of internal) {
-        info.id = ++id;
-        nodes.push({ id: info.id, label, color: "#E65100" });
+    for (const [label, info] of projectsEntries) {
+        idToName.set(Number(info.id), label);
+        nodes.push({ id: info.id, label, color: info.external ? C_EXT : C_INT });
+
+        if (info.external) {
+            continue;
+        }
+
         for (const dep of Object.keys(info.extDeps)) {
             if (!Reflect.has(projects, dep)) {
                 continue;
             }
             edges.push({ from: info.id, to: projects[dep].id });
         }
-    }
 
-    for (const [label, info] of internal) {
         for (const dep of Object.keys(info.dependOn)) {
             if (!Reflect.has(projects, dep)) {
                 continue;
@@ -56,20 +45,8 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     }
 
-
-    // create a network
-    const container = document.getElementById("network");
-
-    // provide the data in the vis format
-    const idToName = new Map();
-    for (const [name, info] of Object.entries(projects)) {
-        idToName.set(Number(info.id), name);
-    }
-
     const nodesDataset = new vis.DataSet(nodes);
     const edgesDataset = new vis.DataSet(edges);
-    const allNodes = nodesDataset.get({ returnType: "Object" });
-    const data = { nodes: nodesDataset, edges: edgesDataset };
     const options = {
         nodes: {
             mass: 1.5,
@@ -108,8 +85,8 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     };
 
-    // initialize your network!
-    const network = new vis.Network(container, data, options);
+    // Initialize network and add "click" events
+    const network = new vis.Network(container, { nodes: nodesDataset, edges: edgesDataset }, options);
     network.on("click", neighbourhoodHighlight);
     network.on("click", updateProjectDesc);
 
@@ -121,11 +98,9 @@ document.addEventListener("DOMContentLoaded", async() => {
             const nodeId = params.nodes[0];
             const selectedNode = idToName.get(nodeId);
             const currProject = projects[selectedNode];
-            const template = document.getElementById("project");
 
             activeNode = document.importNode(template.content, true);
-            const H1 = activeNode.querySelector(".name");
-            H1.textContent = selectedNode;
+            activeNode.querySelector(".name").textContent = selectedNode;
 
             const usesVer = {};
             if (currProject.external) {
@@ -133,20 +108,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                     usesVer[dep] = projects[dep].extDeps[selectedNode];
                 }
 
-                let uri = `/api/${selectedNode}`;
-                if (selectedNode.startsWith("@")) {
-                    const [org, name] = selectedNode.split("/");
-                    uri = `/api/${name}/${org}`;
-                }
-
-                const raw = await fetch(uri, {
-                    method: "GET",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    }
-                });
-                const manifest = await raw.json();
+                const manifest = await request(transformURI("/api", selectedNode));
                 const deps = Object.keys(manifest.dependencies || {});
 
                 const tId = [];
@@ -174,47 +136,14 @@ document.addEventListener("DOMContentLoaded", async() => {
                 }
 
                 const span = activeNode.querySelector(".desc");
-                span.textContent = currProject.description;
-
                 const size = activeNode.querySelector(".size");
-                size.textContent = formatBytes(currProject.size);
-
                 const license = activeNode.querySelector(".license");
-                license.textContent = currProject.license;
-
                 const version = activeNode.querySelector(".version");
+
+                span.textContent = currProject.description;
+                size.textContent = formatBytes(currProject.size);
+                license.textContent = currProject.license;
                 version.textContent = currProject.currVersion || "v0.0.1";
-            }
-
-            // BundlePhobia
-            let uri = currProject.external ? `/api/size/${selectedNode}` : `/api/size/${selectedNode}/@slimio`;
-            if (selectedNode.startsWith("@")) {
-                const [org, name] = selectedNode.split("/");
-                uri = `/api/size/${name}/${org}`;
-            }
-
-            try {
-                const raw = await fetch(uri, {
-                    method: "GET",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    }
-                });
-                const size = await raw.json();
-                const bunMin = activeNode.querySelector(".bun_min");
-                bunMin.textContent = formatBytes(size.size);
-
-                const bunGZIP = activeNode.querySelector(".bun_gzip");
-                bunGZIP.textContent = formatBytes(size.gzip);
-
-                const fullSize = size.dependencySizes.reduce((prev, curr) => prev + curr.approximateSize, 0);
-                const bunFull = activeNode.querySelector(".bun_full");
-                bunFull.textContent = formatBytes(fullSize);
-            }
-            catch (err) {
-                activeNode.getElementById("bundle").classList.add("hide");
-                activeNode.querySelector(".npm_size").style.display = "none";
             }
 
             const vsd = activeNode.querySelector(".vsd");
@@ -225,6 +154,30 @@ document.addEventListener("DOMContentLoaded", async() => {
                 fragment.appendChild(li);
             }
             vsd.appendChild(fragment);
+
+            // BundlePhobia
+            let uri = currProject.external ? `/api/size/${selectedNode}` : `/api/size/${selectedNode}/@slimio`;
+            if (selectedNode.startsWith("@")) {
+                const [org, name] = selectedNode.split("/");
+                uri = `/api/size/${name}/${org}`;
+            }
+
+            try {
+                const size = await request(uri);
+                const bunMin = activeNode.querySelector(".bun_min");
+                const bunGZIP = activeNode.querySelector(".bun_gzip");
+                const bunFull = activeNode.querySelector(".bun_full");
+
+                const fullSize = size.dependencySizes.reduce((prev, curr) => prev + curr.approximateSize, 0);
+                bunMin.textContent = formatBytes(size.size);
+                bunGZIP.textContent = formatBytes(size.gzip);
+                bunFull.textContent = formatBytes(fullSize);
+            }
+            catch (err) {
+                activeNode.getElementById("bundle").classList.add("hide");
+                activeNode.querySelector(".npm_size").style.display = "none";
+            }
+
             menu.appendChild(activeNode);
         }
         else if (activeNode !== null) {
@@ -240,72 +193,47 @@ document.addEventListener("DOMContentLoaded", async() => {
     }
 
     function neighbourhoodHighlight(params) {
+        const allNodes = nodesDataset.get({ returnType: "Object" });
+
         // if something is selected:
         if (params.nodes.length > 0) {
             highlightActive = true;
             const selectedNode = params.nodes[0];
-            let allConnectedNodes = [];
 
             // mark all nodes as hard to read.
-            for (const nodeId in allNodes) {
-                allNodes[nodeId].color = "rgba(200, 200, 200, 0.05)";
-                if (allNodes[nodeId].hiddenLabel === undefined) {
-                    allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
-                    allNodes[nodeId].label = undefined;
-                }
+            for (const node of Object.values(allNodes)) {
+                node.color = C_TRS;
             }
-            const connectedNodes = network.getConnectedNodes(selectedNode);
 
             // get the second degree nodes
+            const connectedNodes = network.getConnectedNodes(selectedNode);
+            const allConnectedNodes = [];
             for (let id = 0; id < connectedNodes.length; id++) {
-                allConnectedNodes = allConnectedNodes.concat(network.getConnectedNodes(connectedNodes[id]));
+                allConnectedNodes.push(...network.getConnectedNodes(connectedNodes[id]));
             }
 
             // all second degree nodes get a different color and their label back
             for (let id = 0; id < allConnectedNodes.length; id++) {
-                allNodes[allConnectedNodes[id]].color = "#607D8B";
-                if (allNodes[allConnectedNodes[id]].hiddenLabel !== undefined) {
-                    allNodes[allConnectedNodes[id]].label = allNodes[allConnectedNodes[id]].hiddenLabel;
-                    allNodes[allConnectedNodes[id]].hiddenLabel = undefined;
-                }
+                allNodes[allConnectedNodes[id]].color = C_OFF;
             }
 
             // all first degree nodes get their own color and their label back
             for (let id = 0; id < connectedNodes.length; id++) {
                 allNodes[connectedNodes[id]].color = undefined;
-                if (allNodes[connectedNodes[id]].hiddenLabel !== undefined) {
-                    allNodes[connectedNodes[id]].label = allNodes[connectedNodes[id]].hiddenLabel;
-                    allNodes[connectedNodes[id]].hiddenLabel = undefined;
-                }
             }
 
             // the main node gets its own color and its label back.
             allNodes[selectedNode].color = undefined;
-            if (allNodes[selectedNode].hiddenLabel !== undefined) {
-                allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
-                allNodes[selectedNode].hiddenLabel = undefined;
-            }
         }
         else if (highlightActive) {
             highlightActive = false;
-            for (const nodeId in allNodes) {
-                const fName = idToName.get(Number(nodeId));
-                allNodes[nodeId].color = projects[fName].external ? "#673AB7" : "#E65100";
-
-                if (allNodes[nodeId].hiddenLabel !== undefined) {
-                    allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
-                    allNodes[nodeId].hiddenLabel = undefined;
-                }
+            for (const node of Object.values(allNodes)) {
+                const fName = idToName.get(Number(node.id));
+                node.color = projects[fName].external ? C_EXT : C_INT;
             }
         }
 
         // transform the object into an array
-        const updateArray = [];
-        for (nodeId in allNodes) {
-            if (Reflect.has(allNodes, nodeId)) {
-                updateArray.push(allNodes[nodeId]);
-            }
-        }
-        nodesDataset.update(updateArray);
+        nodesDataset.update(Object.values(allNodes));
     }
 });

@@ -26,6 +26,7 @@ const repoPkgLinker = new Map();
 const fullExtDeps = new Set();
 const packageException = new Set((process.env.EXCEPT_PKG || "").split(","));
 const npmOrg = process.env.NPM_NAME || `@${process.env.ORG_NAME.toLowerCase()}`;
+let idCount = 0;
 
 async function startHTTPServer(data = {}) {
     const port = process.env.HTTP_PORT || 1337;
@@ -143,6 +144,7 @@ async function main() {
             const license = row.license || {};
 
             projectLink[name] = Object.seal({
+                id: ++idCount,
                 extDeps: [],
                 link: false,
                 currVersion: null,
@@ -183,6 +185,7 @@ async function main() {
             }
         }
         projectLink[dep] = {
+            id: ++idCount,
             external: true,
             link: false,
             uses
