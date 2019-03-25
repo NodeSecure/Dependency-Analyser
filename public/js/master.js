@@ -228,7 +228,11 @@ document.addEventListener("DOMContentLoaded", async() => {
         else if (highlightActive) {
             highlightActive = false;
             for (const node of Object.values(allNodes)) {
-                const fName = idToName.get(Number(node.id));
+                const id = Number(node.id);
+                if (id >= 5000) {
+                    continue;
+                }
+                const fName = idToName.get(id);
                 node.color = projects[fName].external ? C_EXT : C_INT;
             }
         }
