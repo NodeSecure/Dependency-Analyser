@@ -59,4 +59,5 @@ typings/
 
 # JSDoc
 docs/
+jsdoc/
 data/*
