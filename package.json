@@ -11,7 +11,12 @@
         "type": "git",
         "url": "git+https://github.com/SlimIO/ProjectsView.git"
     },
-    "keywords": [],
+    "keywords": [
+        "SlimIO",
+        "project",
+        "package",
+        "analyser"
+    ],
     "author": "SlimIO",
     "license": "MIT",
     "bugs": {
