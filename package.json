@@ -23,7 +23,7 @@
         "dotenv": "^7.0.0",
         "httpie": "^1.1.1",
         "kleur": "^3.0.3",
-        "make-promises-safe": "^4.0.0",
+        "make-promises-safe": "^5.0.0",
         "pacote": "^9.5.0",
         "polka": "^0.5.2",
         "repos": "^2.0.0",
