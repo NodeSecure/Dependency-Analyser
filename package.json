@@ -1,7 +1,7 @@
 {
-    "name": "@slimio/projects-view",
+    "name": "@slimio/dependency-analyser",
     "version": "1.0.0",
-    "description": "SlimIO Projects Global Overview",
+    "description": "SlimIO - Dependency Analyser (Draw a network of all SlimIO Projects)",
     "main": "index.js",
     "scripts": {
         "start": "node index",
