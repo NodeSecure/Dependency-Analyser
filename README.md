@@ -6,7 +6,7 @@
 SlimIO Dependency Analyser (**Draw a network of all projects of a given Organisation**). This project has been primaly designed for SlimIO but work with any kind of organisation who want to achieve a similar result.
 
 <p align="center">
-    <img src="https://i.imgur.com/O6X6bPa.png" height="400" style="border: 2px solid #CCC">
+    <img src="https://i.imgur.com/xd4fGrW.png" height="400" style="border: 2px solid #212121">
 </p>
 
 ## Requirements
