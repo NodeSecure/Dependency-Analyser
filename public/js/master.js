@@ -104,6 +104,9 @@ document.addEventListener("DOMContentLoaded", async() => {
 
             const usesVer = {};
             if (currProject.external) {
+                if (activeNodeId !== null) {
+                    return;
+                }
                 for (const dep of Object.keys(currProject.uses)) {
                     usesVer[dep] = projects[dep].extDeps[selectedNode];
                 }
