@@ -37,7 +37,7 @@
         "pacote": "^9.5.0",
         "polka": "^0.5.2",
         "repos": "^2.0.0",
-        "serve-static": "^1.13.2"
+        "serve-static": "^1.14.1"
     },
     "devDependencies": {
         "@commitlint/cli": "^7.6.1",
