@@ -1,6 +1,3 @@
 {
-    "extends": "@slimio/eslint-config",
-    "rules": {
-        "guard-for-in": "off"
-    }
+    "extends": "@slimio/eslint-config"
 }
