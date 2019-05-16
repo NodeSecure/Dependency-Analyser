@@ -30,7 +30,7 @@
     "homepage": "https://github.com/SlimIO/ProjectsView#readme",
     "dependencies": {
         "@polka/send-type": "^0.5.2",
-        "dotenv": "^7.0.0",
+        "dotenv": "^8.0.0",
         "httpie": "^1.1.1",
         "kleur": "^3.0.3",
         "make-promises-safe": "^5.0.0",
