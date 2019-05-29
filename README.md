@@ -36,6 +36,21 @@ Run `npm start` for a full run.. or just run the http server with `npm run skip`
 ## API
 TBC
 
+## Dependencies
+
+|Name|Refactoring|Security Risk|Usage|
+|---|---|---|---|
+|[@polka/send-type](https://github.com/lukeed/polka)|Minor|Low|HTTP response helper|
+|[dotenv](https://github.com/motdotla/dotenv#readme)|⚠️Major|Low|Env files|
+|[httpie](https://github.com/lukeed/httpie#readme)|⚠️Major|Low|HTTP request|
+|[kleur](https://github.com/lukeed/kleur#readme)|Minor|Low|CLI color|
+|[make-promises-safe](https://github.com/mcollina/make-promises-safe#readme)|⚠️Major|Low|Promises don't exit process when fail|
+|[pacote](https://github.com/zkat/pacote#readme)|Minor|High|Download npm package|
+|[polka](https://github.com/lukeed/polka)|⚠️Major|High|Native HTTP server|
+|[repos](https://github.com/jonschlinkert/repos)|⚠️Major|High|Get all GIT repositories|
+|[serve-static](https://github.com/expressjs/serve-static#readme)|⚠️Major|High|Serve static files|
+
+
 ## Known issues
 - If repository name doesn't match the package name it produce Orphan.
 
