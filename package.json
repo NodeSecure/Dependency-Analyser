@@ -4,6 +4,7 @@
     "description": "SlimIO - Dependency Analyser (Draw a network of all SlimIO Projects)",
     "main": "index.js",
     "scripts": {
+        "test": "cross-env psp && ava --verbose",
         "start": "node index",
         "skip": "node index --skip"
     },
@@ -19,6 +20,7 @@
     ],
     "husky": {
         "hooks": {
+            "pre-push": "cross-env eslint index.js && npm test",
             "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
         }
     },
@@ -44,6 +46,9 @@
         "@commitlint/config-conventional": "^8.0.0",
         "@escommunity/minami": "^1.0.0",
         "@slimio/eslint-config": "^2.0.4",
+        "@slimio/psp": "^0.5.3",
+        "ava": "^2.2.0",
+        "cross-env": "^5.2.0",
         "eslint": "^5.16.0",
         "husky": "^2.3.0"
     },
