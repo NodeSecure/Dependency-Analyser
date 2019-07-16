@@ -1,3 +1,5 @@
+"use strict";
+
 // Require Node.js Dependencies
 const { writeFile, readFile } = require("fs").promises;
 const { join } = require("path");
@@ -28,6 +30,12 @@ const packageException = new Set((process.env.EXCEPT_PKG || "").split(","));
 const npmOrg = process.env.NPM_NAME || `@${process.env.ORG_NAME.toLowerCase()}`;
 let idCount = 0;
 
+/**
+ * @async
+ * @function startHTTPServer
+ * @param {!object} data
+ * @returns {Promise<void>}
+ */
 async function startHTTPServer(data = {}) {
     const port = process.env.HTTP_PORT || 1337;
     const view = await readFile(join(VIEW_DIR, "index.html"), { encoding: "utf8" });
@@ -69,6 +77,13 @@ async function startHTTPServer(data = {}) {
         });
 }
 
+/**
+ * @async
+ * @function processPackage
+ * @param {!string} repo
+ * @param {!URL} URL
+ * @returns {Promise<void>}
+ */
 async function processPackage(repo, URL) {
     console.log(`- Processing ${yellow(repo.fullName)}`);
     try {
@@ -126,6 +141,11 @@ async function processPackage(repo, URL) {
     }
 }
 
+/**
+ * @async
+ * @function main
+ * @returns {Promise<void>}
+ */
 async function main() {
     const [arg = ""] = process.argv.slice(2);
     if (arg.startsWith("--skip")) {
