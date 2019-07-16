@@ -42,7 +42,7 @@
         "serve-static": "^1.14.1"
     },
     "devDependencies": {
-        "@commitlint/cli": "^8.0.0",
+        "@commitlint/cli": "^8.1.0",
         "@commitlint/config-conventional": "^8.0.0",
         "@escommunity/minami": "^1.0.0",
         "@slimio/eslint-config": "^2.0.4",
