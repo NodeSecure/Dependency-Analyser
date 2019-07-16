@@ -42,6 +42,7 @@
     "devDependencies": {
         "@commitlint/cli": "^8.0.0",
         "@commitlint/config-conventional": "^8.0.0",
+        "@escommunity/minami": "^1.0.0",
         "@slimio/eslint-config": "^2.0.4",
         "eslint": "^5.16.0",
         "husky": "^2.3.0"
