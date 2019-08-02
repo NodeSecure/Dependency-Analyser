@@ -18,6 +18,10 @@
         "package",
         "analyser"
     ],
+    "files": [
+        "index.js",
+        "public"
+    ],
     "husky": {
         "hooks": {
             "pre-push": "cross-env eslint index.js && npm test",
