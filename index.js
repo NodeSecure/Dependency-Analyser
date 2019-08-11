@@ -7,7 +7,7 @@ const { join } = require("path");
 // Require Third-party Dependencies
 require("make-promises-safe");
 require("dotenv").config();
-const repos = require("repos");
+const { fetch } = require("fetch-github-repositories");
 const { yellow, red, gray } = require("kleur");
 const { get } = require("httpie");
 const polka = require("polka");
@@ -156,7 +156,7 @@ async function main() {
     }
 
     console.time("gen_link");
-    const fullRepositories = await repos(process.env.ORG_NAME || "SlimIO", { token });
+    const fullRepositories = await fetch(process.env.ORG_NAME || "SlimIO", { token, kind: "orgs" });
     const filteredRepositories = fullRepositories
         .filter((row) => row.archived === false && !packageException.has(row.name.toLowerCase()))
         .map((row) => {
