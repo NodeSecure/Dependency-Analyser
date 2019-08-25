@@ -12,8 +12,8 @@ const { yellow, red, gray } = require("kleur");
 const { get } = require("httpie");
 const polka = require("polka");
 const send = require("@polka/send-type");
-const serve = require("serve-static");
 const pacote = require("pacote");
+const sirv = require("sirv");
 
 // CONSTANTS
 const VIEW_DIR = join(__dirname, "views");
@@ -41,7 +41,7 @@ async function startHTTPServer(data = {}) {
     const view = await readFile(join(VIEW_DIR, "index.html"), { encoding: "utf8" });
 
     polka()
-        .use(serve(join(__dirname, "public")))
+        .use(sirv(join(__dirname, "public")))
         .get("/", (req, res) => send(res, 200, view, { "Content-Type": "text/html" }))
         .get("/data", (req, res) => send(res, 200, data))
         .get("/api/size/:pkg/:org?", async(req, res) => {
