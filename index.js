@@ -1,19 +1,21 @@
 "use strict";
 
+require("make-promises-safe");
+require("dotenv").config();
+
 // Require Node.js Dependencies
 const { writeFile, readFile } = require("fs").promises;
 const { join } = require("path");
 
 // Require Third-party Dependencies
-require("make-promises-safe");
-require("dotenv").config();
 const { fetch } = require("fetch-github-repositories");
-const { yellow, red, gray } = require("kleur");
+const { yellow, red, white } = require("kleur");
 const { get } = require("httpie");
 const polka = require("polka");
 const send = require("@polka/send-type");
 const pacote = require("pacote");
 const sirv = require("sirv");
+const open = require("open");
 
 // CONSTANTS
 const VIEW_DIR = join(__dirname, "views");
@@ -40,6 +42,7 @@ async function startHTTPServer(data = {}) {
     const port = process.env.HTTP_PORT || 1337;
     const view = await readFile(join(VIEW_DIR, "index.html"), { encoding: "utf8" });
 
+    process.on("SIGINT", () => process.exit(0));
     polka()
         .use(sirv(join(__dirname, "public")))
         .get("/", (req, res) => send(res, 200, view, { "Content-Type": "text/html" }))
@@ -72,8 +75,10 @@ async function startHTTPServer(data = {}) {
 
             return send(res, 200, manifest);
         })
-        .listen(port, () => {
-            console.log(gray(`\n > HTTP Server started at ${yellow(`http://localhost:${port}`)}\n`));
+        .listen(port, async() => {
+            const link = `http://localhost:${port}`;
+            console.log(white().bold(`\n > HTTP Server started at ${yellow().bold(link)}\n`));
+            await open(link);
         });
 }
 
