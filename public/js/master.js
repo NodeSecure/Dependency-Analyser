@@ -63,7 +63,13 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     for (const [label, info] of projectsEntries) {
         idToName.set(Number(info.id), label);
-        nodes.push({ id: info.id, label, color: info.external ? C_EXT : C_INT });
+
+        const hasDependencies = info.external && info.hasDependencies;
+        nodes.push({
+            id: info.id,
+            label: hasDependencies ? `⚠️ ${label}` : label,
+            color: info.external ? C_EXT : C_INT
+        });
 
         if (info.external) {
             continue;

@@ -21,6 +21,7 @@ const open = require("open");
 const VIEW_DIR = join(__dirname, "views");
 const LINK_FILE = join(__dirname, "data", `${process.env.ORG_NAME}.json`);
 const FILTER_ORG = process.env.FILTER_ORG || "ok";
+const NPM_TOKEN = typeof process.env.NPM_TOKEN === "string" ? { token: process.env.NPM_TOKEN } : {};
 
 // Globals
 const token = process.env.GIT_TOKEN;
@@ -138,6 +139,42 @@ async function processPackage(repo, URL) {
 
 /**
  * @async
+ * @function fetchExternal
+ * @param {!string} dep
+ * @returns {void}
+ */
+async function fetchExternal(dep) {
+    let hasDependencies = false;
+    try {
+        const { dependencies = {} } = await pacote.manifest(dep, { ...NPM_TOKEN });
+        hasDependencies = Object.keys(dependencies).length > 0;
+    }
+    catch (error) {
+        // Ignore
+    }
+
+    const uses = {};
+    for (const [name, info] of Object.entries(projectLink)) {
+        if (info.external || info.link) {
+            continue;
+        }
+
+        if (Reflect.has(info.extDeps, dep)) {
+            uses[name] = info.extDeps[dep];
+        }
+    }
+
+    projectLink[dep] = {
+        id: ++idCount,
+        external: true,
+        link: false,
+        hasDependencies,
+        uses
+    };
+}
+
+/**
+ * @async
  * @function main
  * @returns {Promise<void>}
  */
@@ -175,28 +212,8 @@ async function main() {
 
     await Promise.all(filteredRepositories
         .map((repo) => processPackage(repo, new URL(`https://api.github.com/repos/${repo.fullName}/contents/package.json`))));
+    await Promise.all([...fullExtDeps].map((dep) => fetchExternal(dep)));
 
-    for (const dep of fullExtDeps) {
-        const uses = {};
-        for (const [name, info] of Object.entries(projectLink)) {
-            if (info.external || info.link) {
-                continue;
-            }
-
-            if (Reflect.has(info.extDeps, dep)) {
-                uses[name] = info.extDeps[dep];
-            }
-        }
-        projectLink[dep] = {
-            id: ++idCount,
-            external: true,
-            link: false,
-            uses
-        };
-    }
-
-
-    // console.log(repoPkgLinker);
     for (let id = 0; id < orphans.length; id++) {
         const [name, repoName, value] = orphans[id];
         if (!repoPkgLinker.has(name)) {

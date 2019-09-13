@@ -25,6 +25,7 @@ $ npm ci
 Then create a local `.env` file with a Personal Github token
 ```
 GIT_TOKEN=
+NPM_TOKEN=
 HTTP_PORT=1337
 ORG_NAME=SlimIO
 NPM_NAME=@slimio
