@@ -173,12 +173,8 @@ async function main() {
             };
         });
 
-    const promises = [];
-    for (const repo of filteredRepositories) {
-        const packageURL = new URL(`https://api.github.com/repos/${repo.fullName}/contents/package.json`);
-        promises.push(processPackage(repo, packageURL));
-    }
-    await Promise.all(promises);
+    await Promise.all(filteredRepositories
+        .map((repo) => processPackage(repo, new URL(`https://api.github.com/repos/${repo.fullName}/contents/package.json`))));
 
     for (const dep of fullExtDeps) {
         const uses = {};
@@ -222,8 +218,6 @@ async function main() {
     // Write file on the disk!
     await writeFile(join(__dirname, "data", `${process.env.ORG_NAME}.json`), JSON.stringify(projectLink, null, 4));
     await startHTTPServer(projectLink);
-
-    return void 0;
 }
 
 const [arg = ""] = process.argv.slice(2);
