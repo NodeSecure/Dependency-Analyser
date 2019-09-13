@@ -157,31 +157,25 @@ document.addEventListener("DOMContentLoaded", async() => {
                 fragment.appendChild(li);
             }
             vsd.appendChild(fragment);
+            menu.appendChild(activeNode);
 
-            // BundlePhobia
-            let uri = currProject.external ? `/api/size/${selectedNode}` : `/api/size/${selectedNode}/@slimio`;
-            if (selectedNode.startsWith("@")) {
-                const [org, name] = selectedNode.split("/");
-                uri = `/api/size/${name}/${org}`;
-            }
-
+            // Request sizes on the bundlephobia API
             try {
-                const size = await request(uri);
-                const bunMin = activeNode.querySelector(".bun_min");
-                const bunGZIP = activeNode.querySelector(".bun_gzip");
-                const bunFull = activeNode.querySelector(".bun_full");
+                const {
+                    gzip, size, dependencySizes
+                } = await request(`https://bundlephobia.com/api/size?package=${selectedNode}`);
+                const fullSize = dependencySizes.reduce((prev, curr) => prev + curr.approximateSize, 0);
 
-                const fullSize = size.dependencySizes.reduce((prev, curr) => prev + curr.approximateSize, 0);
-                bunMin.textContent = formatBytes(size.size);
-                bunGZIP.textContent = formatBytes(size.gzip);
-                bunFull.textContent = formatBytes(fullSize);
+                document.querySelector(".size-gzip").textContent = formatBytes(gzip);
+                document.querySelector(".size-min").textContent = formatBytes(size);
+                document.querySelector(".size-full").textContent = formatBytes(fullSize);
             }
             catch (err) {
-                activeNode.getElementById("bundle").classList.add("hide");
-                activeNode.querySelector(".npm_size").style.display = "none";
-            }
+                console.error(err);
 
-            menu.appendChild(activeNode);
+                document.getElementById("bundle").classList.add("hide");
+                document.querySelector(".npm_size").style.display = "none";
+            }
         }
         else if (activeNode !== null) {
             menu.innerHTML = "<p>Select a project</p>";

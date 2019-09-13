@@ -19,9 +19,8 @@ async function request(path, customHeaders = Object.create(null)) {
         method: "GET",
         headers: Object.assign({}, headers, customHeaders)
     });
-    const json = await raw.json();
 
-    return json;
+    return raw.json();
 }
 
 function transformURI(uri = "/api", selectedNode) {
