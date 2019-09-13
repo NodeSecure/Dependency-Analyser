@@ -4,7 +4,7 @@ require("make-promises-safe");
 require("dotenv").config();
 
 // Require Node.js Dependencies
-const { createReadStream, promises: { writeFile, readFile } } = require("fs");
+const { createReadStream, readFileSync, promises: { writeFile, readFile } } = require("fs");
 const { join } = require("path");
 
 // Require Third-party Dependencies
@@ -142,14 +142,6 @@ async function processPackage(repo, URL) {
  * @returns {Promise<void>}
  */
 async function main() {
-    const [arg = ""] = process.argv.slice(2);
-    if (arg.startsWith("--skip")) {
-        const data = await readFile(LINK_FILE);
-        await startHTTPServer(JSON.parse(data));
-
-        return void 0;
-    }
-
     console.time("gen_link");
     const fullRepositories = await fetch(process.env.ORG_NAME || "SlimIO", { token, kind: "orgs" });
     const filteredRepositories = fullRepositories
@@ -233,4 +225,12 @@ async function main() {
 
     return void 0;
 }
-main().catch(console.error);
+
+const [arg = ""] = process.argv.slice(2);
+if (arg.startsWith("--skip")) {
+    const data = readFileSync(LINK_FILE, "utf-8");
+    startHTTPServer(JSON.parse(data)).catch(console.error);
+}
+else {
+    main().catch(console.error);
+}
