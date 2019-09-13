@@ -10,11 +10,7 @@ body, html {
     height: 100%;
     font-family: "Roboto", sans-serif;
     font-size: 16px;
-    background: rgb(254,255,255);
-    background: -moz-radial-gradient(center, ellipse cover,  rgba(254,255,255,1) 0%, rgba(221,241,249,1) 35%, rgba(247,247,247,1) 100%);
-    background: -webkit-radial-gradient(center, ellipse cover,  rgba(254,255,255,1) 0%,rgba(221,241,249,1) 35%,rgba(247,247,247,1) 100%);
-    background: radial-gradient(ellipse at center,  rgba(254,255,255,1) 0%,rgba(221,241,249,1) 35%,rgba(247,247,247,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#f7f7f7',GradientType=1 );
+    background: #263238;
 }
 
 body {

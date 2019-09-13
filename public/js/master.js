@@ -42,11 +42,11 @@ document.addEventListener("DOMContentLoaded", async() => {
     const template = document.getElementById("project");
 
     // CONSTANTS (for nodes colors)
-    const C_EXT = "#78909C";
-    const C_INT = "#01579B";
-    const C_OFF = "rgba(150, 150, 150, 0.2)";
-    const C_TRS = "rgba(150, 150, 150, 0.2)";
-    const C_INDIRECT = "#673AB7";
+    const C_EXT = "#263238";
+    const C_INT = "#00796B";
+    const C_OFF = "rgba(100, 150, 150, 0.1)";
+    const C_TRS = "rgba(100, 150, 150, 0.1)";
+    const C_INDIRECT = "#3F51B5";
 
     // Globals
     const nodes = [];
