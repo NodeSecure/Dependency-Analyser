@@ -1,13 +1,52 @@
+const networkGraphOptions = {
+    nodes: {
+        mass: 3,
+        shape: "box",
+        size: 5,
+        font: {
+            face: "Roboto",
+            vadjust: 0.5,
+            size: 22,
+            color: "#ECEFF1",
+            bold: "22px"
+        },
+        margin: 14,
+        shadow: {
+            enabled: true,
+            color: "rgba(20, 20, 20, 0.2)"
+        }
+    },
+    edges: {
+        arrows: "from",
+        hoverWidth: 2,
+        selectionWidth: 2,
+        width: 2
+    },
+    physics: {
+        forceAtlas2Based: {
+            gravitationalConstant: -26,
+            centralGravity: 0.005,
+            springLength: 230,
+            springConstant: 0.18
+        },
+        maxVelocity: 150,
+        solver: "forceAtlas2Based",
+        timestep: 0.35,
+        stabilization: { iterations: 150 }
+    }
+};
+
 document.addEventListener("DOMContentLoaded", async() => {
     // HTML Elements
     const container = document.getElementById("network");
     const template = document.getElementById("project");
 
     // CONSTANTS (for nodes colors)
-    const C_EXT = "#673AB7";
-    const C_INT = "#E65100";
-    const C_OFF = "#607D8B";
-    const C_TRS = "rgba(200, 200, 200, 0.05)";
+    const C_EXT = "#78909C";
+    const C_INT = "#01579B";
+    const C_OFF = "rgba(150, 150, 150, 0.2)";
+    const C_TRS = "rgba(150, 150, 150, 0.2)";
+    const C_INDIRECT = "#673AB7";
 
     // Globals
     const nodes = [];
@@ -47,46 +86,9 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     const nodesDataset = new vis.DataSet(nodes);
     const edgesDataset = new vis.DataSet(edges);
-    const options = {
-        nodes: {
-            mass: 1.5,
-            shape: "box",
-            size: 24,
-            font: {
-                face: "Roboto",
-                vadjust: 0.5,
-                size: 22,
-                color: "#ECEFF1",
-                bold: "22px"
-            },
-            margin: 7.5,
-            shadow: {
-                enabled: true,
-                color: "rgba(20, 20, 20, 0.2)"
-            }
-        },
-        edges: {
-            arrows: "from",
-            hoverWidth: 2,
-            selectionWidth: 2,
-            width: 1.2
-        },
-        physics: {
-            forceAtlas2Based: {
-                gravitationalConstant: -26,
-                centralGravity: 0.005,
-                springLength: 230,
-                springConstant: 0.18
-            },
-            maxVelocity: 150,
-            solver: "forceAtlas2Based",
-            timestep: 0.35,
-            stabilization: { iterations: 150 }
-        }
-    };
 
     // Initialize network and add "click" events
-    const network = new vis.Network(container, { nodes: nodesDataset, edges: edgesDataset }, options);
+    const network = new vis.Network(container, { nodes: nodesDataset, edges: edgesDataset }, networkGraphOptions);
     network.on("click", neighbourhoodHighlight);
     network.on("click", updateProjectDesc);
 
@@ -118,7 +120,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                 for (const dep of deps) {
                     const lId = ++id;
                     // eslint-disable-next-line
-                    nodesDataset.add({ id: lId, label: dep, color: "#2979FF", x: params.pointer.canvas.x, y: params.pointer.canvas.y });
+                    nodesDataset.add({ id: lId, label: dep, color: C_INDIRECT, x: params.pointer.canvas.x, y: params.pointer.canvas.y });
                     edgesDataset.add({ id: lId, from: nodeId, to: lId });
                     tId.push(lId);
                 }

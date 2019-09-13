@@ -10,11 +10,11 @@ body, html {
     height: 100%;
     font-family: "Roboto", sans-serif;
     font-size: 16px;
-    background: rgb(39,50,56);
-    background: -moz-radial-gradient(center, ellipse cover, rgba(39,50,56,1) 1%, rgba(22,30,33,1) 100%);
-    background: -webkit-radial-gradient(center, ellipse cover, rgba(39,50,56,1) 1%,rgba(22,30,33,1) 100%);
-    background: radial-gradient(ellipse at center, rgba(39,50,56,1) 1%,rgba(22,30,33,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#273238', endColorstr='#161e21',GradientType=1 );
+    background: rgb(254,255,255);
+    background: -moz-radial-gradient(center, ellipse cover,  rgba(254,255,255,1) 0%, rgba(221,241,249,1) 35%, rgba(247,247,247,1) 100%);
+    background: -webkit-radial-gradient(center, ellipse cover,  rgba(254,255,255,1) 0%,rgba(221,241,249,1) 35%,rgba(247,247,247,1) 100%);
+    background: radial-gradient(ellipse at center,  rgba(254,255,255,1) 0%,rgba(221,241,249,1) 35%,rgba(247,247,247,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#f7f7f7',GradientType=1 );
 }
 
 body {
@@ -44,9 +44,7 @@ section#menu {
     z-index: 9999;
     border-radius: 4px;
     color: #ECEFF1;
-    box-shadow: 1px 1px 10px rgba(20, 20, 20, 0.8);
-    border-right: 2px solid rgba(200, 200, 200, 0.1);
-    border-bottom: 2px solid rgba(200, 200, 200, 0.1);
+    box-shadow: 1px 1px 10px rgba(20, 20, 20, 0.2);
     font-family: Roboto;
 }
     section#menu h1 {
@@ -68,9 +66,10 @@ section#menu {
     section#menu > p {
         text-align: center;
         font-family: Roboto;
-        color: rgba(255, 255, 255, 0.5);
+        color: #FFF;
         margin-bottom: 5px;
         font-weight: bold;
+        font-size: 18px;
     }
     section#menu span {
         font-size: 14px;
