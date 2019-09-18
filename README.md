@@ -9,7 +9,7 @@
 SlimIO Dependency Analyser (**Draw a network of all projects of a given Organisation**). This project has been primaly designed for SlimIO but work with any kind of organisation who want to achieve a similar result.
 
 <p align="center">
-    <img src="https://i.imgur.com/xd4fGrW.png" height="400" style="border: 2px solid #212121">
+    <img src="https://media.discordapp.net/attachments/359783689040953354/622219583121784893/unknown.png" height="400" style="border: 2px solid #212121">
 </p>
 
 ## Requirements
@@ -18,11 +18,17 @@ SlimIO Dependency Analyser (**Draw a network of all projects of a given Organisa
 ## Getting Started
 
 ```bash
-$ git clone https://github.com/SlimIO/ProjectsView.git
+$ git clone https://github.com/SlimIO/Dependency-Analyser.git
+$ cd Dependency-Analyser
 $ npm ci
+$ npm start
 ```
 
-Then create a local `.env` file with a Personal Github token
+> 👀 use `npm start` for a complete run.. or just run the http server with `npm run skip` (complete run must be executed at least one time).
+
+## Environment Variables
+
+To configure the project you have to set environment variables. These variables can be set in a **.env** file.
 ```
 GIT_TOKEN=
 NPM_TOKEN=
@@ -33,10 +39,7 @@ FILTER_ORG=ok
 EXCEPT_PKG=eslint-config,is
 ```
 
-Run `npm start` for a full run.. or just run the http server with `npm run skip` (full run must be executed at least one time).
-
-## API
-TBC
+To known how to get your **GIT_TOKEN** and **NPM_TOKEN** follow the [Governance Guide](https://github.com/SlimIO/Governance/blob/master/docs/tooling.md#environment-variables).
 
 ## Dependencies
 

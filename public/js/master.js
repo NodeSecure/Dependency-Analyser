@@ -36,17 +36,17 @@ const networkGraphOptions = {
     }
 };
 
+// CONSTANTS (for nodes colors)
+const C_EXT = "#263238";
+const C_INT = "#00796B";
+const C_OFF = "rgba(100, 150, 150, 0.1)";
+const C_TRS = "rgba(100, 150, 150, 0.1)";
+const C_INDIRECT = "#3F51B5";
+
 document.addEventListener("DOMContentLoaded", async() => {
     // HTML Elements
     const container = document.getElementById("network");
     const template = document.getElementById("project");
-
-    // CONSTANTS (for nodes colors)
-    const C_EXT = "#263238";
-    const C_INT = "#00796B";
-    const C_OFF = "rgba(100, 150, 150, 0.1)";
-    const C_TRS = "rgba(100, 150, 150, 0.1)";
-    const C_INDIRECT = "#3F51B5";
 
     // Globals
     const nodes = [];
