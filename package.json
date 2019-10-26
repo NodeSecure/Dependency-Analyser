@@ -38,7 +38,7 @@
     "homepage": "https://github.com/SlimIO/ProjectsView#readme",
     "dependencies": {
         "@polka/send-type": "^0.5.2",
-        "dotenv": "^8.1.0",
+        "dotenv": "^8.2.0",
         "fetch-github-repositories": "^2.0.0",
         "httpie": "^1.1.2",
         "kleur": "^3.0.3",
