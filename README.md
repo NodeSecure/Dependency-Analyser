@@ -13,7 +13,7 @@ SlimIO Dependency Analyser (**Draw a network of all projects of a given Organisa
 </p>
 
 ## Requirements
-- [Node.js](https://nodejs.org/en/) v10 or higher
+- [Node.js](https://nodejs.org/en/) v12 or higher
 
 ## Getting Started
 
