@@ -20,9 +20,7 @@
     ],
     "files": [
         "index.js",
-        "public",
-        "src",
-        "data"
+        "public"
     ],
     "husky": {
         "hooks": {
