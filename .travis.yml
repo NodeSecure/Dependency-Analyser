@@ -1,6 +1,8 @@
 language: node_js
 node_js:
     - "12"
+before_script:
+  - touch .env
 after_failure:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
