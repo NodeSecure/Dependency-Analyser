@@ -5,7 +5,8 @@
 ![dep](https://img.shields.io/david/SlimIO/Dependency-Analyser.svg)
 ![size](https://img.shields.io/github/languages/code-size/SlimIO/Dependency-Analyser.svg)
 [![Known Vulnerabilities](https://snyk.io//test/github/SlimIO/Dependency-Analyser/badge.svg?targetFile=package.json)](https://snyk.io//test/github/SlimIO/Dependency-Analyser?targetFile=package.json)
-[![Build Status](https://travis-ci.com/SlimIO/Dependency-Analyser.svg?branch=master)](https://travis-ci.com/SlimIO/Dependency-Analyser) [![Greenkeeper badge](https://badges.greenkeeper.io/SlimIO/Dependency-Analyser.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.com/SlimIO/Dependency-Analyser.svg?branch=master)](https://travis-ci.com/SlimIO/Dependency-Analyser)
+[![Greenkeeper badge](https://badges.greenkeeper.io/SlimIO/Dependency-Analyser.svg)](https://greenkeeper.io/)
 
 SlimIO Dependency Analyser (**Draw a network of all projects of a given Organisation**). This project has been primaly designed for SlimIO but work with any kind of organisation who want to achieve a similar result.
 
