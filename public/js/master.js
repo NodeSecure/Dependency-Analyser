@@ -1,52 +1,15 @@
-const networkGraphOptions = {
-    nodes: {
-        mass: 3,
-        shape: "box",
-        size: 5,
-        font: {
-            face: "Roboto",
-            vadjust: 0.5,
-            size: 22,
-            color: "#ECEFF1",
-            bold: "22px"
-        },
-        margin: 14,
-        shadow: {
-            enabled: true,
-            color: "rgba(20, 20, 20, 0.2)"
-        }
-    },
-    edges: {
-        arrows: "from",
-        hoverWidth: 2,
-        selectionWidth: 2,
-        width: 2
-    },
-    physics: {
-        forceAtlas2Based: {
-            gravitationalConstant: -26,
-            centralGravity: 0.005,
-            springLength: 230,
-            springConstant: 0.18
-        },
-        maxVelocity: 150,
-        solver: "forceAtlas2Based",
-        timestep: 0.35,
-        stabilization: { iterations: 150 }
-    }
-};
-
-// CONSTANTS (for nodes colors)
-const C_EXT = "#263238";
-const C_INT = "#00796B";
-const C_OFF = "rgba(100, 150, 150, 0.1)";
-const C_TRS = "rgba(100, 150, 150, 0.1)";
-const C_INDIRECT = "#3F51B5";
-
-document.addEventListener("DOMContentLoaded", async() => {
+document.addEventListener("DOMContentLoaded", async () => {
     // HTML Elements
     const container = document.getElementById("network");
     const template = document.getElementById("project");
+    const dataListElement = document.getElementById("package-list");
+    const inputFinderElement = document.getElementById("package-finder");
+
+    // CONSTANTS (for nodes colors)
+    const C_EXT = "#673AB7";
+    const C_INT = "#E65100";
+    const C_OFF = "#607D8B";
+    const C_TRS = "rgba(200, 200, 200, 0.05)";
 
     // Globals
     const nodes = [];
@@ -57,19 +20,17 @@ document.addEventListener("DOMContentLoaded", async() => {
     let activeNodeId = null;
     let id = 5000;
 
+    // Initialize search bar
+    inputFinderElement.addEventListener("input", searchOnItems);
+
     // Fetch data
     const projects = await request("/data");
     const projectsEntries = Object.entries(projects).filter(([, info]) => !info.link);
 
     for (const [label, info] of projectsEntries) {
         idToName.set(Number(info.id), label);
-
-        const hasDependencies = info.external && info.hasDependencies;
-        nodes.push({
-            id: info.id,
-            label: hasDependencies ? `⚠️ ${label}` : label,
-            color: info.external ? C_EXT : C_INT
-        });
+        dataListElement.insertAdjacentHTML('beforeend', `<option data-value="${info.id}" value="${label} ${info.currVersion}"></option>`);
+        nodes.push({ id: info.id, label, color: info.external ? C_EXT : C_INT });
 
         if (info.external) {
             continue;
@@ -92,15 +53,63 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     const nodesDataset = new vis.DataSet(nodes);
     const edgesDataset = new vis.DataSet(edges);
+    const options = {
+        nodes: {
+            mass: 1.5,
+            shape: "box",
+            size: 24,
+            font: {
+                face: "Roboto",
+                vadjust: 0.5,
+                size: 22,
+                color: "#ECEFF1",
+                bold: "22px"
+            },
+            margin: 7.5,
+            shadow: {
+                enabled: true,
+                color: "rgba(20, 20, 20, 0.2)"
+            }
+        },
+        edges: {
+            arrows: "from",
+            hoverWidth: 2,
+            selectionWidth: 2,
+            width: 1.2
+        },
+        physics: {
+            forceAtlas2Based: {
+                gravitationalConstant: -26,
+                centralGravity: 0.005,
+                springLength: 230,
+                springConstant: 0.18
+            },
+            maxVelocity: 150,
+            solver: "forceAtlas2Based",
+            timestep: 0.35,
+            stabilization: { iterations: 150 }
+        }
+    };
 
     // Initialize network and add "click" events
-    const network = new vis.Network(container, { nodes: nodesDataset, edges: edgesDataset }, networkGraphOptions);
+    const network = new vis.Network(container, { nodes: nodesDataset, edges: edgesDataset }, options);
     network.on("click", neighbourhoodHighlight);
     network.on("click", updateProjectDesc);
 
+    function searchOnItems() {
+        const inputFinderElement = document.getElementById("package-finder");
+        if (inputFinderElement.value != null && inputFinderElement !== "") {
+            let idToSend = document.querySelector("#package-list option[value='" + inputFinderElement.value + "']").dataset.value;
+            idToSend = parseInt(idToSend);
+            const params = { nodes: [idToSend] };
+            network.focus(idToSend, { animation: true });
+            neighbourhoodHighlight(params);
+            updateProjectDesc(params);
+        }
+    }
+
     async function updateProjectDesc(params) {
         const menu = document.getElementById("menu");
-
         if (params.nodes.length > 0) {
             menu.innerHTML = "";
             const nodeId = params.nodes[0];
@@ -126,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                 for (const dep of deps) {
                     const lId = ++id;
                     // eslint-disable-next-line
-                    nodesDataset.add({ id: lId, label: dep, color: C_INDIRECT, x: params.pointer.canvas.x, y: params.pointer.canvas.y });
+                    nodesDataset.add({ id: lId, label: dep, color: "#2979FF", x: params.pointer.canvas.x, y: params.pointer.canvas.y });
                     edgesDataset.add({ id: lId, from: nodeId, to: lId });
                     tId.push(lId);
                 }
@@ -165,28 +174,34 @@ document.addEventListener("DOMContentLoaded", async() => {
                 fragment.appendChild(li);
             }
             vsd.appendChild(fragment);
-            menu.appendChild(activeNode);
 
-            // Request sizes on the bundlephobia API
+            // BundlePhobia
+            let uri = currProject.external ? `/api/size/${selectedNode}` : `/api/size/${selectedNode}/@slimio`;
+            if (selectedNode.startsWith("@")) {
+                const [org, name] = selectedNode.split("/");
+                uri = `/api/size/${name}/${org}`;
+            }
+
             try {
-                const {
-                    gzip, size, dependencySizes
-                } = await request(`https://bundlephobia.com/api/size?package=${selectedNode}`);
-                const fullSize = dependencySizes.reduce((prev, curr) => prev + curr.approximateSize, 0);
+                const size = await request(uri);
+                const bunMin = activeNode.querySelector(".bun_min");
+                const bunGZIP = activeNode.querySelector(".bun_gzip");
+                const bunFull = activeNode.querySelector(".bun_full");
 
-                document.querySelector(".size-gzip").textContent = formatBytes(gzip);
-                document.querySelector(".size-min").textContent = formatBytes(size);
-                document.querySelector(".size-full").textContent = formatBytes(fullSize);
+                const fullSize = size.dependencySizes.reduce((prev, curr) => prev + curr.approximateSize, 0);
+                bunMin.textContent = formatBytes(size.size);
+                bunGZIP.textContent = formatBytes(size.gzip);
+                bunFull.textContent = formatBytes(fullSize);
             }
             catch (err) {
-                console.error(err);
-
-                document.getElementById("bundle").classList.add("hide");
-                document.querySelector(".npm_size").style.display = "none";
+                activeNode.getElementById("bundle").classList.add("hide");
+                activeNode.querySelector(".npm_size").style.display = "none";
             }
+
+            menu.appendChild(activeNode);
         }
         else if (activeNode !== null) {
-            menu.innerHTML = "<p>Select a project</p>";
+            resetMenu();
             activeNode = null;
             if (activeNodeId !== null) {
                 for (const id of activeNodeId) {
@@ -244,5 +259,21 @@ document.addEventListener("DOMContentLoaded", async() => {
 
         // transform the object into an array
         nodesDataset.update(Object.values(allNodes));
+    }
+
+    function resetMenu() {
+        menu.innerHTML = `<p>Select a project</p><input
+            type="text"
+            list="package-list"
+            id="package-finder"
+            class="package-finder"
+            placeholder="Package Name"
+        /><datalist id="package-list"></datalist>`
+        const dataListElement = document.getElementById("package-list");
+        const inputFinderElement = document.getElementById("package-finder");
+        for (const [label, info] of projectsEntries) {
+            dataListElement.insertAdjacentHTML('beforeend', `<option data-value="${info.id}" value="${label} ${info.currVersion}"></option>`);
+        }
+        inputFinderElement.addEventListener("input", searchOnItems);
     }
 });

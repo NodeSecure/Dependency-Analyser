@@ -1,18 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
-    <link rel="stylesheet" href="/css/master.css">
-    <title>SlimIO Projects Overview</title>
-</head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"
+        ></script>
+        <link
+            href="https://fonts.googleapis.com/css?family=Roboto"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css"
+        />
+        <link rel="stylesheet" href="/css/master.css" />
+        <title>SlimIO Projects Overview</title>
+    </head>
     <body>
         <section id="menu">
-            <p>Select a project</p>
+            <p>Select a project or search a project</p>
+            <input
+            type="text"
+            list="package-list"
+            id="package-finder"
+            class="package-finder"
+            placeholder="Package Name"
+        />
+        <datalist id="package-list"></datalist>
         </section>
         <section id="network"></section>
         <script src="/js/master.js"></script>
@@ -23,14 +40,25 @@
             <br />
             <ul>
                 <li>Latest version: <b class="version">0.0.1</b></li>
-                <li class="li_size">GIT Repository size: <b class="size">0kB</b></li>
+                <li class="li_size">
+                    GIT Repository size: <b class="size">0kB</b>
+                </li>
                 <li class="li_license">License: <b class="license">MIT</b></li>
             </ul>
             <p class="npm_size">npm package size</p>
             <section id="bundle">
-                <section><b class="size-min">0kB</b><p>MIN</p></section>
-                <section><b class="size-gzip">0kB</b><p>GZIP</p></section>
-                <section><b class="size-full">0kB</b><p>FULL</p></section>
+                <section>
+                    <b class="bun_min">0kB</b>
+                    <p>MIN</p>
+                </section>
+                <section>
+                    <b class="bun_gzip">0kB</b>
+                    <p>GZIP</p>
+                </section>
+                <section>
+                    <b class="bun_full">0kB</b>
+                    <p>FULL</p>
+                </section>
             </section>
             <h2>Consumed Version by Internal Dep</h2>
             <ul class="vsd"></ul>
