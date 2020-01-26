@@ -142,3 +142,17 @@ section#network {
     flex-grow: 1;
     height: 100vh;
 }
+
+.package-finder {
+    height: 30px;
+    border-radius: 2px;
+    padding: 0 10px;
+    margin-top: 10px;
+    border-color: #607D8B;
+    background: #37474F;
+    color: #FFF;
+    outline: none;
+}
+.package-finder::placeholder {
+    color: #FFF;
+}
