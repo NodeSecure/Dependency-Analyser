@@ -53,7 +53,7 @@
         "@slimio/eslint-config": "^4.0.0",
         "@slimio/psp": "^0.10.0",
         "ava": "^3.1.0",
-        "cross-env": "^7.0.0",
+        "cross-env": "^7.0.2",
         "eslint": "^6.8.0",
         "husky": "^4.2.1"
     },
