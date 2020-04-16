@@ -57,7 +57,8 @@ async function startHTTPServer(data = {}) {
             }
 
             const manifest = await pacote.manifest(
-                typeof org === "undefined" ? pkg : `${org}/${pkg}`
+                typeof org === "undefined" ? pkg : `${org}/${pkg}`,
+                { ...NPM_TOKEN }
             );
 
             return send(res, 200, manifest);
