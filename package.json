@@ -1,63 +1,67 @@
 {
-    "name": "@slimio/dependency-analyser",
-    "version": "1.0.0",
-    "description": "SlimIO - Dependency Analyser (Draw a network of all SlimIO Projects)",
-    "main": "index.js",
-    "scripts": {
-        "test": "cross-env psp && ava --verbose",
-        "start": "node index",
-        "skip": "node index --skip"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/SlimIO/ProjectsView.git"
-    },
-    "keywords": [
-        "SlimIO",
-        "project",
-        "package",
-        "analyser"
-    ],
-    "files": [
-        "index.js",
-        "public"
-    ],
-    "husky": {
-        "hooks": {
-            "pre-push": "cross-env eslint index.js && npm test",
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-        }
-    },
-    "author": "SlimIO",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/SlimIO/ProjectsView/issues"
-    },
-    "homepage": "https://github.com/SlimIO/ProjectsView#readme",
-    "dependencies": {
-        "@polka/send-type": "^0.5.2",
-        "dotenv": "^8.2.0",
-        "fetch-github-repositories": "^2.0.0",
-        "httpie": "^1.1.2",
-        "kleur": "^3.0.3",
-        "make-promises-safe": "^5.1.0",
-        "open": "^7.0.3",
-        "pacote": "^11.1.4",
-        "polka": "^0.5.2",
-        "sirv": "^0.4.2"
-    },
-    "devDependencies": {
-        "@commitlint/cli": "^8.3.5",
-        "@commitlint/config-conventional": "^8.3.4",
-        "@escommunity/minami": "^1.0.0",
-        "@slimio/eslint-config": "^4.0.0",
-        "@slimio/psp": "^0.11.0",
-        "ava": "^3.7.0",
-        "cross-env": "^7.0.2",
-        "eslint": "^6.8.0",
-        "husky": "^4.2.5"
-    },
-    "engines": {
-        "node": ">=12"
+  "name": "@slimio/dependency-analyser",
+  "version": "1.0.0",
+  "description": "SlimIO - Dependency Analyser (Draw a network of all SlimIO Projects)",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env psp && ava --verbose",
+    "start": "node index",
+    "skip": "node index --skip",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SlimIO/ProjectsView.git"
+  },
+  "keywords": [
+    "SlimIO",
+    "project",
+    "package",
+    "analyser"
+  ],
+  "files": [
+    "index.js",
+    "public"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-push": "cross-env eslint index.js && npm test",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "author": "SlimIO",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SlimIO/ProjectsView/issues"
+  },
+  "homepage": "https://github.com/SlimIO/ProjectsView#readme",
+  "dependencies": {
+    "@polka/send-type": "^0.5.2",
+    "dotenv": "^8.2.0",
+    "fetch-github-repositories": "^2.0.0",
+    "httpie": "^1.1.2",
+    "kleur": "^3.0.3",
+    "make-promises-safe": "^5.1.0",
+    "open": "^7.0.3",
+    "pacote": "^11.1.4",
+    "polka": "^0.5.2",
+    "sirv": "^0.4.2",
+    "snyk": "^1.316.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@escommunity/minami": "^1.0.0",
+    "@slimio/eslint-config": "^4.0.0",
+    "@slimio/psp": "^0.11.0",
+    "ava": "^3.7.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^6.8.0",
+    "husky": "^4.2.5"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "snyk": true
 }
