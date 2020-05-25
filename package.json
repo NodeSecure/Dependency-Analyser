@@ -44,7 +44,7 @@
         "open": "^7.0.3",
         "pacote": "^11.1.4",
         "polka": "^0.5.2",
-        "sirv": "^0.4.2"
+        "sirv": "^0.4.6"
     },
     "devDependencies": {
         "@commitlint/cli": "^8.3.5",
