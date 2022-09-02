@@ -1,64 +1,52 @@
 {
-    "name": "@slimio/dependency-analyser",
+    "name": "@nodesecure/dependency-analyser",
     "version": "1.0.0",
-    "description": "SlimIO - Dependency Analyser (Draw a network of all SlimIO Projects)",
-    "main": "index.js",
+    "description": "Draw a graphic network of a given Github or Gitlab organization",
+    "type": "module",
+    "exports": "./index.js",
     "scripts": {
-        "test": "cross-env psp && nyc --reporter=lcov ava --verbose",
-        "coverage": "codecov",
         "start": "node index",
         "skip": "node index --skip"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/SlimIO/ProjectsView.git"
+        "url": "git+https://github.com/NodeSecure/Dependency-Analyser.git"
     },
     "keywords": [
-        "SlimIO",
+        "NodeSecure",
         "project",
+        "repository",
         "package",
-        "analyser"
+        "analyser",
+        "github",
+        "gitlab"
     ],
     "files": [
         "index.js",
         "public"
     ],
-    "husky": {
-        "hooks": {
-            "pre-push": "cross-env eslint index.js && npm test",
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-        }
-    },
-    "author": "SlimIO",
+    "author": "GENTILHOMME Thomas <gentilhomme.thomas@gmail.com>",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/SlimIO/ProjectsView/issues"
+        "url": "https://github.com/NodeSecure/Dependency-Analyser/issues"
     },
-    "homepage": "https://github.com/SlimIO/ProjectsView#readme",
+    "homepage": "https://github.com/NodeSecure/Dependency-Analyser#readme",
     "dependencies": {
         "@polka/send-type": "^0.5.2",
-        "dotenv": "^8.2.0",
+        "dotenv": "^16.0.2",
         "fetch-github-repositories": "^2.0.0",
         "httpie": "^1.1.2",
-        "kleur": "^3.0.3",
+        "kleur": "^4.1.5",
         "make-promises-safe": "^5.1.0",
-        "open": "^7.0.4",
-        "pacote": "^11.1.10",
+        "open": "^8.4.0",
+        "pacote": "^13.6.2",
         "polka": "^0.5.2",
-        "sirv": "^0.4.6"
+        "sirv": "^2.0.2"
     },
     "devDependencies": {
-        "@commitlint/cli": "^8.3.5",
-        "@commitlint/config-conventional": "^8.3.4",
-        "@escommunity/minami": "^1.0.0",
-        "@slimio/eslint-config": "^4.1.0",
-        "@slimio/psp": "^0.11.1",
-        "ava": "^3.8.2",
-        "codecov": "^3.7.0",
-        "cross-env": "^7.0.2",
-        "eslint": "^7.1.0",
-        "husky": "^4.2.5",
-        "nyc": "^15.0.1"
+        "@nodesecure/eslint-config": "^1.5.0",
+        "cross-env": "^7.0.3",
+        "eslint": "^8.23.0"
     },
     "engines": {
         "node": ">=12"

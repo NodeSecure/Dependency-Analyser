@@ -1,158 +1,187 @@
-body, html, div, ul, li, p, span, b, h1, h2, h3, h4, h5, h6, label, input {
-    margin: 0;
-    padding: 0;
-}
-li {
-    list-style: none;
+body,
+html,
+div,
+ul,
+li,
+p,
+span,
+b,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+input {
+  margin: 0;
+  padding: 0;
 }
 
-body, html {
-    height: 100%;
-    font-family: "Roboto", sans-serif;
-    font-size: 16px;
-    background: #263238;
+li {
+  list-style: none;
+}
+
+body,
+html {
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  background: #263238;
 }
 
 body {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    position: relative;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  position: relative;
 }
 
 hr {
-    border: 1px solid #263238;
-    width: 95%;
-    height: 0px;
-    padding: 0;
-    margin-bottom: 5px;
+  border: 1px solid #263238;
+  width: 95%;
+  height: 0px;
+  padding: 0;
+  margin-bottom: 5px;
 }
 
 section#menu {
-    width: 280px;
-    background: #37474F;
-    display: flex;
-    flex-direction: column;
-    padding: 12px;
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    z-index: 9999;
-    border-radius: 4px;
-    color: #ECEFF1;
-    box-shadow: 1px 1px 10px rgba(20, 20, 20, 0.2);
-    font-family: Roboto;
+  width: 280px;
+  background: #37474F;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 9999;
+  border-radius: 4px;
+  color: #ECEFF1;
+  box-shadow: 1px 1px 10px rgba(20, 20, 20, 0.2);
+  font-family: Roboto;
 }
-    section#menu h1 {
-        color: #FFD54F
-    }
-    section#menu h2 {
-        color: #FFF;
-        font-size: 14px;
-        background: rgba(20, 20, 20, 0.2);
-        border-radius: 2px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 30px;
-        margin-bottom: 10px;
-    }
 
-    section#menu > p {
-        text-align: center;
-        font-family: Roboto;
-        color: #FFF;
-        margin-bottom: 5px;
-        font-weight: bold;
-        font-size: 18px;
-    }
-    section#menu span {
-        font-size: 14px;
-        margin-top: 5px;
-        text-align: justify;
-        font-family: Roboto;
-        font-style: italic;
-        color: #CFD8DC;
-    }
-    section#menu b {
-        color: #FFD54F;
-        font-family: Roboto;
-    }
-    section#menu ul {
-        max-height: 60vh;
-        overflow-y: auto;
-        margin-bottom: 5px;
-    }
-    section#menu ul li {
-        font-size: 14px;
-        font-family: Roboto;
-        display: flex;
-        background: rgb(64, 81, 90);
-        margin-bottom: 1px;
-        justify-content: center;
-        padding: 3px;
-    }
-        section#menu ul li > b {
-            margin-left: auto;
-            margin-right: 5px;
-        }
+section#menu h1 {
+  color: #FFD54F
+}
 
-    section#menu > p {
-        font-size: 12px;
-        text-align: center;
-        margin-top: 8px;
-    }
+section#menu h2 {
+  color: #FFF;
+  font-size: 14px;
+  background: rgba(20, 20, 20, 0.2);
+  border-radius: 2px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 30px;
+  margin-bottom: 10px;
+}
 
-    section#menu section#bundle {
-        height: 60px;
-        margin-top: 4px;
-        margin-bottom: 5px;
-        display: flex;
-        padding: 5px;
-    }
-        section#menu section#bundle.hide {
-            display: none;
-        }
-        section#menu section#bundle > section {
-            flex-basis: 80px;
-            flex-shrink: 0;
-            flex-grow: 1;
-            border-left: 2px solid #263238;
-            border-top: 2px solid #263238;
-            border-right: 2px solid #2e393f;
-            border-bottom: 2px solid #2e393f;
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 15px;
-            box-shadow: 1px 1px 10px rgba(20, 20, 20, 0.2) inset;
-        }
-        section#menu section#bundle > section + section {
-            margin-left: 10px;
-        }
-            section#menu section#bundle > section p {
-                color: #FFFDE7;
-                font-size: 13px;
-            }
+section#menu>p {
+  text-align: center;
+  font-family: Roboto;
+  color: #FFF;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+section#menu span {
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: justify;
+  font-family: Roboto;
+  font-style: italic;
+  color: #CFD8DC;
+}
+
+section#menu b {
+  color: #FFD54F;
+  font-family: Roboto;
+}
+
+section#menu ul {
+  max-height: 60vh;
+  overflow-y: auto;
+  margin-bottom: 5px;
+}
+
+section#menu ul li {
+  font-size: 14px;
+  font-family: Roboto;
+  display: flex;
+  background: rgb(64, 81, 90);
+  margin-bottom: 1px;
+  justify-content: center;
+  padding: 3px;
+}
+
+section#menu ul li>b {
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+section#menu>p {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+section#menu section#bundle {
+  height: 60px;
+  margin-top: 4px;
+  margin-bottom: 5px;
+  display: flex;
+  padding: 5px;
+}
+
+section#menu section#bundle.hide {
+  display: none;
+}
+
+section#menu section#bundle>section {
+  flex-basis: 80px;
+  flex-shrink: 0;
+  flex-grow: 1;
+  border-left: 2px solid #263238;
+  border-top: 2px solid #263238;
+  border-right: 2px solid #2e393f;
+  border-bottom: 2px solid #2e393f;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  box-shadow: 1px 1px 10px rgba(20, 20, 20, 0.2) inset;
+}
+
+section#menu section#bundle>section+section {
+  margin-left: 10px;
+}
+
+section#menu section#bundle>section p {
+  color: #FFFDE7;
+  font-size: 13px;
+}
 
 section#network {
-    flex-grow: 1;
-    height: 100vh;
+  flex-grow: 1;
+  height: 100vh;
 }
 
 .package-finder {
-    height: 30px;
-    border-radius: 2px;
-    padding: 0 10px;
-    margin-top: 10px;
-    border-color: #607D8B;
-    background: #37474F;
-    color: #FFF;
-    outline: none;
+  height: 30px;
+  border-radius: 2px;
+  padding: 0 10px;
+  margin-top: 10px;
+  border-color: #607D8B;
+  background: #37474F;
+  color: #FFF;
+  outline: none;
 }
+
 .package-finder::placeholder {
-    color: #FFF;
+  color: #FFF;
 }
